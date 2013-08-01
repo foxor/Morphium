@@ -6,15 +6,22 @@ public class MoveDude : Ability {
 	
 	public float speed;
 	
+	private Nullable<Vector3> delta;
+	
 	public override void Cast () {
-		Nullable<Vector3> delta = Delta;
-		if (delta.HasValue) {
+		delta = Delta;
+	}
+	
+	public void Update () {
+		if (delta != null) {
 			Vector3 normlizedDelta = delta.Value.normalized * speed * Time.deltaTime;
 			if (delta.Value.sqrMagnitude < normlizedDelta.sqrMagnitude) {
 				transform.position += delta.Value;
+				delta = null;
 			}
 			else {
 				transform.position += normlizedDelta;
+				delta -= normlizedDelta;
 			}
 		}
 	}
