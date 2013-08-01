@@ -2,9 +2,10 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 
-public class Move : Ability<MovementData> {
+public class Move : Ability {
 	
 	public float speed;
+	public Ability onArrival;
 	
 	private Nullable<Vector3> delta;
 	
@@ -18,6 +19,9 @@ public class Move : Ability<MovementData> {
 			if (delta.Value.sqrMagnitude < normlizedDelta.sqrMagnitude) {
 				transform.position += delta.Value;
 				delta = null;
+				if (onArrival != null) {
+					onArrival.Cast();
+				}
 			}
 			else {
 				transform.position += normlizedDelta;
@@ -25,8 +29,4 @@ public class Move : Ability<MovementData> {
 			}
 		}
 	}
-}
-
-[Serializable]
-public class MovementData : AbilityData {
 }

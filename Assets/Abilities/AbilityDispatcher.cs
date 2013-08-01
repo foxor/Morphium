@@ -2,12 +2,12 @@ using UnityEngine;
 using System.Collections;
 
 public class AbilityDispatcher : MonoBehaviour {
-	public Castable QAbility;
-	public Castable WAbility;
-	public Castable EAbility;
-	public Castable RAbility;
-	public Castable LeftClickAbility;
-	public Castable RightClickAbility;
+	public Ability QAbility;
+	public Ability WAbility;
+	public Ability EAbility;
+	public Ability RAbility;
+	public Ability LeftClickAbility;
+	public Ability RightClickAbility;
 	
 	public void Update() {
 		if (Input.GetKey(KeyCode.Q)) {

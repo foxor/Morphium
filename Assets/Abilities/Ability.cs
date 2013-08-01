@@ -1,24 +1,9 @@
 using UnityEngine;
 using System;
-using System.Collections;
+using System.Collections.Generic;
 
-public abstract class Castable : MonoBehaviour {
+public abstract class Ability : MonoBehaviour {
 	public abstract void Cast();
-}
-
-public abstract class Ability<T> : Castable where T : AbilityData {
-	protected T configuration;
-	public T Configuration {
-		get {
-			return configuration;
-		}
-		set {
-			configuration = value;
-			OnConfigurationChange();
-		}
-	}
-	
-	public virtual void OnConfigurationChange(){}
 	
 	public Nullable<Vector3> Delta {
 		get {
@@ -31,8 +16,4 @@ public abstract class Ability<T> : Castable where T : AbilityData {
 			return null;
 		}
 	}
-}
-
-[Serializable]
-public abstract class AbilityData {
 }
