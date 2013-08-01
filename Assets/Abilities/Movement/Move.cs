@@ -27,5 +27,6 @@ public class Move : Ability<MovementData> {
 	}
 }
 
+[Serializable]
 public class MovementData : AbilityData {
 }
