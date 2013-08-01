@@ -11,22 +11,22 @@ public class AbilityDispatcher : MonoBehaviour {
 	
 	public void Update() {
 		if (Input.GetKey(KeyCode.Q)) {
-			QAbility.Cast();
+			QAbility.TryCast(Input.GetKeyDown(KeyCode.Q));
 		}
 		if (Input.GetKey(KeyCode.W)) {
-			WAbility.Cast();
+			WAbility.TryCast(Input.GetKeyDown(KeyCode.W));
 		}
 		if (Input.GetKey(KeyCode.E)) {
-			EAbility.Cast();
+			EAbility.TryCast(Input.GetKeyDown(KeyCode.E));
 		}
 		if (Input.GetKey(KeyCode.R)) {
-			RAbility.Cast();
+			RAbility.TryCast(Input.GetKeyDown(KeyCode.R));
 		}
 		if (Input.GetMouseButton(0)) {
-			LeftClickAbility.Cast();
+			LeftClickAbility.TryCast(Input.GetMouseButtonDown(0));
 		}
 		if (Input.GetMouseButton(1)) {
-			RightClickAbility.Cast();
+			RightClickAbility.TryCast(Input.GetMouseButtonDown(1));
 		}
 	}
 }
