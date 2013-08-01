@@ -16,4 +16,4 @@ build
 *.unityproj
 *.booproj
 
-shop_data/
+morphium_data/
