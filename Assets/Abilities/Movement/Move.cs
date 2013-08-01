@@ -2,7 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 
-public class MoveDude : Ability {
+public class Move : Ability<MovementData> {
 	
 	public float speed;
 	
@@ -25,4 +25,7 @@ public class MoveDude : Ability {
 			}
 		}
 	}
+}
+
+public class MovementData : AbilityData {
 }
