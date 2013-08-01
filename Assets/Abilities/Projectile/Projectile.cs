@@ -8,6 +8,7 @@ public class Projectile : Ability<ProjectileData> {
 	
 	public override void Cast () {
 		GameObject projectile = (GameObject)Instantiate(prefab);
+		projectile.transform.position = transform.position;
 		Move projectileMovement = projectile.GetComponent<Move>();
 		projectileMovement.Configuration = projectileMovementConfiguration;
 		projectileMovement.Cast();
