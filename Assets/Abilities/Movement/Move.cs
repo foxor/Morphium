@@ -9,8 +9,9 @@ public class Move : Ability {
 	
 	private Nullable<Vector3> delta;
 	
-	public override void Cast () {
-		delta = Delta;
+	public override void Cast (Vector3 target) {
+		target.y = transform.position.y;
+		delta = target - transform.position;
 	}
 	
 	public void Update () {
@@ -20,7 +21,7 @@ public class Move : Ability {
 				transform.position += delta.Value;
 				delta = null;
 				if (onArrival != null) {
-					onArrival.Cast();
+					onArrival.Cast(Vector3.zero);
 				}
 			}
 			else {

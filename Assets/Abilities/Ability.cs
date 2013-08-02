@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 
 public abstract class Ability : MonoBehaviour {
-	public abstract void Cast();
+	public abstract void Cast(Vector3 target);
 	
 	public bool requiresPress;
 	
@@ -31,24 +31,12 @@ public abstract class Ability : MonoBehaviour {
 		}
 	}
 	
-	public void TryCast(bool pressedThisFrame) {
+	public void TryCast(bool pressedThisFrame, Vector3 target) {
 		if (castState == CastState.Idle && 
 				(pressedThisFrame || !requiresPress)) {
 			castComplete = Time.time + castTime;
 			nextIdle = castComplete + cooldown;
-			Cast();
-		}
-	}
-	
-	public Nullable<Vector3> Delta {
-		get {
-			Nullable<RaycastHit> rayCast = ClickRaycast.GetLastHit();
-			if (rayCast.HasValue) {
-				Vector3 val = rayCast.Value.point - transform.position;
-				val.y = 0f;
-				return val;
-			}
-			return null;
+			Cast(target);
 		}
 	}
 }
