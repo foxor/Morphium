@@ -15,7 +15,7 @@ public class EnemySpawner : MonoBehaviour {
 			AI brain = enemy.GetComponent<AI>();
 			brain.Target = gameObject;
 			Vector2 circle = Random.insideUnitCircle.normalized * distance;
-			enemy.transform.position = new Vector3(circle.x, transform.position.y, circle.y);
+			enemy.transform.position = transform.position + new Vector3(circle.x, 0f, circle.y);
 		}
 	}
 }
