@@ -13,5 +13,6 @@ public class Projectile : Ability {
 		Move projectileMovement = projectile.GetComponent<Move>();
 		projectileMovement.Cast(t);
 		projectile.GetComponent<ProjectileDamage>().damage = damage;
+		projectile.layer = gameObject.layer;
 	}
 }
