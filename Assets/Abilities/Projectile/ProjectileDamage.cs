@@ -5,7 +5,7 @@ public class ProjectileDamage : MonoBehaviour {
 	public Damage damage;
 	
 	public void OnTriggerEnter(Collider other) {
-		other.gameObject.GetComponent<StatManager>().DealDamage(damage);
+		other.gameObject.GetComponent<StatManager>().DealDamage(damage, true);
 		Destroy(gameObject);
 	}
 }

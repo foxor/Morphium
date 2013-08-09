@@ -23,8 +23,7 @@ public abstract class StatBar : MonoBehaviour {
 	}
 	
 	public void OnGUI() {
-		Stat barStat = manager.stats[BarStat];
-		float pct = ((float)barStat.Current) / ((float)barStat.Max);
+		float pct = ((float)manager.GetCurrent(BarStat)) / ((float)manager.GetMax(BarStat));
 		
 		fullRect.x = DrawLocation.x;
 		fullRect.y = DrawLocation.y;

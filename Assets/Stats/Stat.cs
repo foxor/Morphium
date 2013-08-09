@@ -9,6 +9,18 @@ public class Stat {
 	public int Max {
 		get; set;
 	}
+	
+	public float SingleTickRegenTimer {
+		get; set;
+	}
+	
+	public float NextRegenTick {
+		get; set;
+	}
+	
+	public float RegenCooldown {
+		get; set;
+	}
 }
 
 public enum StatType {

@@ -41,9 +41,9 @@ public abstract class Ability : MonoBehaviour {
 		if (castState == CastState.Idle && 
 				(pressedThisFrame || !requiresPress)) {
 			int cost = Cost();
-			if (statManager == null || statManager.stats[StatType.Charge].Current > cost) {
+			if (statManager == null || statManager.GetCurrent(StatType.Charge) > cost) {
 				if (statManager != null && cost > 0) {
-					statManager.stats[StatType.Charge].Current -= cost;
+					statManager.DealDamage(new Damage(){Magnitude = cost, Type = Element.Plasma}, false);
 				}
 				castComplete = Time.time + castTime;
 				nextIdle = castComplete + cooldown;
