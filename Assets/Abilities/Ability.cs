@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 
 public abstract class Ability : MonoBehaviour {
-	public abstract void Cast(Vector3 target);
+	protected abstract void Cast(Vector3 target);
 	
 	public bool requiresPress;
 	

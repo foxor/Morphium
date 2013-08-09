@@ -43,10 +43,10 @@ public class AI : MonoBehaviour {
 		
 		switch (mindstate) {
 		case State.Approach:
-			movement.Cast(Target.transform.position);
+			movement.TryCast(true, Target.transform.position);
 			break;
 		case State.Attack:
-			projectile.Cast(Target.transform.position);
+			projectile.TryCast(true, Target.transform.position);
 			break;
 		}
 	}
