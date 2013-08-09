@@ -13,7 +13,8 @@ public class StatManager : MonoBehaviour {
 				Max = boosts[statType],
 				Current = boosts[statType],
 				SingleTickRegenTimer = 0.6f,
-				NextRegenTick = Time.time
+				NextRegenTick = Time.time,
+				Regenerates = statType != StatType.Health
 			};
 		}
 	}
@@ -42,7 +43,7 @@ public class StatManager : MonoBehaviour {
 	
 	public void Update() {
 		foreach (Stat s in stats.Values) {
-			while (s.Current < s.Max && s.NextRegenTick < Time.time) {
+			while (s.Current < s.Max && s.Regenerates && s.NextRegenTick < Time.time) {
 				s.Current ++;
 				s.NextRegenTick += s.SingleTickRegenTimer;
 			}

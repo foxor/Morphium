@@ -21,6 +21,10 @@ public class Stat {
 	public float RegenCooldown {
 		get; set;
 	}
+	
+	public bool Regenerates {
+		get; set;
+	}
 }
 
 public enum StatType {
