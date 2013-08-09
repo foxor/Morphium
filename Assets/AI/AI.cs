@@ -8,7 +8,7 @@ public class AI : MonoBehaviour {
 		Attack,
 	}
 	
-	public const float EVALUATION_TIMER = 1f;
+	public const float EVALUATION_TIMER = 0.3f;
 	public const float ATTACK_OUTER_LIMIT_SQUARED = 10f * 10f;
 	
 	public GameObject Target {
