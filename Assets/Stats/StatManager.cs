@@ -5,10 +5,16 @@ using System.Collections.Generic;
 public class StatManager : MonoBehaviour {
 	protected Dictionary<StatType, Stat> stats;
 	
-	public void Awake() {
+	public void Start() {
 		stats = new Dictionary<StatType, Stat>();
+		Dictionary<StatType, int> boosts = GetComponent<ItemManager>().Boosts();
 		foreach (StatType statType in Enum.GetValues(typeof(StatType))) {
-			stats[statType] = new Stat(){Max = 5, Current = 5, SingleTickRegenTimer = 0.6f, NextRegenTick = Time.time};
+			stats[statType] = new Stat(){
+				Max = boosts[statType],
+				Current = boosts[statType],
+				SingleTickRegenTimer = 0.6f,
+				NextRegenTick = Time.time
+			};
 		}
 	}
 	
