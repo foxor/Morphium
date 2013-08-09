@@ -8,7 +8,7 @@ public class StatManager : MonoBehaviour {
 	public void Awake() {
 		stats = new Dictionary<StatType, Stat>();
 		foreach (StatType statType in Enum.GetValues(typeof(StatType))) {
-			stats[statType] = new Stat(){Max = 5, Current = 5, SingleTickRegenTimer = 2f, NextRegenTick = Time.time};
+			stats[statType] = new Stat(){Max = 5, Current = 5, SingleTickRegenTimer = 0.6f, NextRegenTick = Time.time};
 		}
 	}
 	
