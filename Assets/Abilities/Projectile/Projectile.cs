@@ -5,7 +5,7 @@ public class Projectile : Ability {
 	
 	public GameObject prefab;
 	
-	public Damage damage = new Damage(){Magnitude = 3, Type = Element.Overload};
+	public Damage damage = new Damage(){Magnitude = 3, Type = Element.Physical};
 	public int cost;
 	
 	protected override void Cast (Vector3 t) {
