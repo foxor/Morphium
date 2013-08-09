@@ -6,6 +6,7 @@ public class Projectile : Ability {
 	public GameObject prefab;
 	
 	public Damage damage = new Damage(){Magnitude = 3, Type = Element.Overload};
+	public int cost;
 	
 	protected override void Cast (Vector3 t) {
 		GameObject projectile = (GameObject)Instantiate(prefab);
@@ -14,5 +15,9 @@ public class Projectile : Ability {
 		projectileMovement.TryCast(true, t);
 		projectile.GetComponent<ProjectileDamage>().damage = damage;
 		projectile.layer = gameObject.layer;
+	}
+	
+	protected override int Cost () {
+		return cost;
 	}
 }

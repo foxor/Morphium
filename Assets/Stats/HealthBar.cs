@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class HealthBar : StatBar {
 	protected override StatType BarStat {
 		get {
-			return StatType.Charge;
+			return StatType.Health;
 		}
 	}
 	

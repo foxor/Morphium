@@ -14,6 +14,10 @@ public class Move : Ability {
 		delta = target - transform.position;
 	}
 	
+	protected override int Cost () {
+		return 0;
+	}
+	
 	public void Update () {
 		if (delta != null) {
 			Vector3 normlizedDelta = delta.Value.normalized * speed * Time.deltaTime;

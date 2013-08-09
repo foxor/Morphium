@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public abstract class Ability : MonoBehaviour {
 	protected abstract void Cast(Vector3 target);
+	protected abstract int Cost();
 	
 	public bool requiresPress;
 	
@@ -12,6 +13,7 @@ public abstract class Ability : MonoBehaviour {
 	
 	protected float castComplete;
 	protected float nextIdle;
+	protected StatManager statManager;
 	
 	public enum CastState {
 		Idle,
@@ -31,12 +33,22 @@ public abstract class Ability : MonoBehaviour {
 		}
 	}
 	
+	public void Awake() {
+		statManager = GetComponent<StatManager>();
+	}
+	
 	public void TryCast(bool pressedThisFrame, Vector3 target) {
 		if (castState == CastState.Idle && 
 				(pressedThisFrame || !requiresPress)) {
-			castComplete = Time.time + castTime;
-			nextIdle = castComplete + cooldown;
-			Cast(target);
+			int cost = Cost();
+			if (statManager == null || statManager.stats[StatType.Charge].Current > cost) {
+				if (statManager != null && cost > 0) {
+					statManager.stats[StatType.Charge].Current -= cost;
+				}
+				castComplete = Time.time + castTime;
+				nextIdle = castComplete + cooldown;
+				Cast(target);
+			}
 		}
 	}
 }
