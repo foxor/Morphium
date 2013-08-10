@@ -22,7 +22,14 @@ public class DamageDuringContact : MonoBehaviour {
 		}
 	}
 	
-	public void OnTriggerStay(Collider other) {
+	public void OnTriggerExit(Collider other) {
+		StatManager manager = other.GetComponent<StatManager>();
+		if (manager != null) {
+			nextDamageTime.Remove(manager);
+		}
+	}
+	
+	public void Update() {
 		foreach (StatManager manager in nextDamageTime.Keys) {
 			while (nextDamageTime[manager] < Time.time) {
 				manager.DealDamage(singleTickDamage, true);
