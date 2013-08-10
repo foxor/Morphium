@@ -6,7 +6,7 @@ public class Move : Ability {
 	
 	public float speed;
 	public Ability onArrival;
-	
+	public int cost;
 	public bool continueToRange;
 	public float range;
 	
@@ -21,7 +21,7 @@ public class Move : Ability {
 	}
 	
 	protected override int Cost () {
-		return 0;
+		return cost;
 	}
 	
 	public void Stop () {
