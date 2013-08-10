@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 public class DamageDuringContact : MonoBehaviour {
 	
@@ -30,7 +31,7 @@ public class DamageDuringContact : MonoBehaviour {
 	}
 	
 	public void Update() {
-		foreach (StatManager manager in nextDamageTime.Keys) {
+		foreach (StatManager manager in nextDamageTime.Keys.ToArray()) {
 			while (nextDamageTime[manager] < Time.time) {
 				manager.DealDamage(singleTickDamage, true);
 				nextDamageTime[manager] += damageTickInterval;

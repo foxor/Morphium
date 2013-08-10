@@ -10,19 +10,16 @@ public class Duration : MonoBehaviour {
 		}
 		set {
 			lifetime = value;
-			alarm = Time.time + alarm;
+			alarm = Time.time + lifetime;
 		}
 	}
 	
 	protected float alarm;
 	
-	void Start () {
-		Lifetime = 0f;
-	}
-	
 	void Update () {
 		if (Time.time > alarm) {
 			Destroy(gameObject);
 		}
+		Debug.Log(Time.time - alarm + " : " + Time.time);
 	}
 }

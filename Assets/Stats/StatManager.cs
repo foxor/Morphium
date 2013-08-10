@@ -20,7 +20,7 @@ public class StatManager : MonoBehaviour {
 	}
 	
 	public void DealDamage(Damage damage, bool stopRegen) {
-		if (damage.Magnitude == 0) {
+		if (damage.Magnitude == 0 || this == null) {
 			return;
 		}
 		Stat damaged = stats[damage.Type.Damages()];
