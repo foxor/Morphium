@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 public class AI : MonoBehaviour {
 	
@@ -12,10 +13,7 @@ public class AI : MonoBehaviour {
 	public const float EVALUATION_TIMER = 0.3f;
 	public const float ATTACK_OUTER_LIMIT_SQUARED = 10f * 10f;
 	
-	public GameObject Target {
-		get;
-		set;
-	}
+	protected Target target;
 	
 	protected Move movement;
 	protected Projectile projectile;
@@ -23,11 +21,22 @@ public class AI : MonoBehaviour {
 	protected float nextEvaluation;
 	
 	protected State Reevaluate() {
-		if (Target == null) {
+		target = TargetManager.GetTargets()
+			.Where(x => x.gameObject != this.gameObject)
+			.OrderBy(x => 
+				(x.gameObject.transform.position - transform.position)
+				.sqrMagnitude)
+			.ElementAt(0);
+		
+		if (target == null) {
 			return State.Idle;
 		}
 		
-		Vector3 delta = Target.transform.position - transform.position;
+		if (target.gameObject.layer == gameObject.layer) {
+			Debug.Log("Friendly fire!");
+		}
+		
+		Vector3 delta = target.transform.position - transform.position;
 		if (delta.sqrMagnitude < ATTACK_OUTER_LIMIT_SQUARED) {
 			movement.Stop();
 			return State.Attack;
@@ -39,24 +48,29 @@ public class AI : MonoBehaviour {
 		nextEvaluation = 0f;
 		movement = GetComponent<Move>();
 		projectile = GetComponent<Projectile>();
+		ResetTimer();
+	}
+	
+	protected void ResetTimer() {
+		nextEvaluation = Time.time + EVALUATION_TIMER + Random.Range(0f, EVALUATION_TIMER);
 	}
 	
 	public void Update() {
 		if (Time.time > nextEvaluation) {
-			nextEvaluation = Time.time + EVALUATION_TIMER + Random.Range(0f, EVALUATION_TIMER);
+			ResetTimer();
 			mindstate = Reevaluate();
 		}
 		
-		if (Target == null) {
+		if (target == null) {
 			return;
 		}
 		
 		switch (mindstate) {
 		case State.Approach:
-			movement.TryCast(true, Target.transform.position);
+			movement.TryCast(true, target.transform.position);
 			break;
 		case State.Attack:
-			projectile.TryCast(true, Target.transform.position);
+			projectile.TryCast(true, target.transform.position);
 			break;
 		}
 	}
