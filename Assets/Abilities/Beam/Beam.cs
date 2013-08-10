@@ -21,7 +21,7 @@ public class Beam : Ability {
 	protected override void Cast (Vector3 target) {
 		if (beam == null) {
 			beam = (GameObject)Instantiate(prefab);
-			beam.layer = gameObject.layer;
+			beam.GetDamageDealer().Owner = gameObject;
 		}
 		castThisFrame = true;
 		target.y = transform.position.y;

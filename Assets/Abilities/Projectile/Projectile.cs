@@ -14,7 +14,7 @@ public class Projectile : Ability {
 		Move projectileMovement = projectile.GetComponent<Move>();
 		projectileMovement.TryCast(true, t);
 		projectile.GetComponent<ProjectileDamage>().damage = damage;
-		projectile.layer = gameObject.layer;
+		projectile.GetDamageDealer().Owner = gameObject;
 	}
 	
 	protected override int Cost () {

@@ -13,7 +13,7 @@ public class Pool : Ability {
 		GameObject pool = (GameObject)Instantiate(prefab);
 		pool.transform.position = transform.position;
 		pool.GetComponent<DamageDuringContact>().damagePerSecond = damage;
-		pool.layer = gameObject.layer;
+		pool.GetDamageDealer().Owner = gameObject;
 		pool.GetComponent<Duration>().Lifetime = duration;
 	}
 	

@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 
-public class DamageDuringContact : MonoBehaviour {
+public class DamageDuringContact : DamageDealer {
 	
 	public Damage damagePerSecond = new Damage(){ Magnitude = 4, Type = Element.Physical};
 	
@@ -16,14 +16,14 @@ public class DamageDuringContact : MonoBehaviour {
 		singleTickDamage = new Damage() {Magnitude = 1, Type = damagePerSecond.Type};
 	}
 	
-	public void OnTriggerEnter(Collider other) {
+	protected override void Enter(GameObject other) {
 		StatManager manager = other.GetComponent<StatManager>();
 		if (manager != null) {
 			nextDamageTime[manager] = Time.time + damageTickInterval;
 		}
 	}
 	
-	public void OnTriggerExit(Collider other) {
+	protected override void Exit(GameObject other) {
 		StatManager manager = other.GetComponent<StatManager>();
 		if (manager != null) {
 			nextDamageTime.Remove(manager);
