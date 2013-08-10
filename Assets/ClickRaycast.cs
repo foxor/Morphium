@@ -17,9 +17,11 @@ public class ClickRaycast : MonoBehaviour {
 	}
 	
 	public void Update() {
-		hitSomething = Physics.Raycast(
-			Camera.main.ScreenPointToRay(Input.mousePosition),
-			out lastHit
-		);
+		if (Camera.main != null) {
+			hitSomething = Physics.Raycast(
+				Camera.main.ScreenPointToRay(Input.mousePosition),
+				out lastHit
+			);
+		}
 	}
 }

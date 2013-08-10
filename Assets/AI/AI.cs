@@ -6,6 +6,7 @@ public class AI : MonoBehaviour {
 	public enum State {
 		Approach,
 		Attack,
+		Idle
 	}
 	
 	public const float EVALUATION_TIMER = 0.3f;
@@ -22,6 +23,10 @@ public class AI : MonoBehaviour {
 	protected float nextEvaluation;
 	
 	protected State Reevaluate() {
+		if (Target == null) {
+			return State.Idle;
+		}
+		
 		Vector3 delta = Target.transform.position - transform.position;
 		if (delta.sqrMagnitude < ATTACK_OUTER_LIMIT_SQUARED) {
 			movement.Stop();
@@ -40,6 +45,10 @@ public class AI : MonoBehaviour {
 		if (Time.time > nextEvaluation) {
 			nextEvaluation = Time.time + EVALUATION_TIMER + Random.Range(0f, EVALUATION_TIMER);
 			mindstate = Reevaluate();
+		}
+		
+		if (Target == null) {
+			return;
 		}
 		
 		switch (mindstate) {
