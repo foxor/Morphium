@@ -7,11 +7,17 @@ public class Move : Ability {
 	public float speed;
 	public Ability onArrival;
 	
+	public bool continueToRange;
+	public float range;
+	
 	private Nullable<Vector3> delta;
 	
 	protected override void Cast (Vector3 target) {
 		target.y = transform.position.y;
 		delta = target - transform.position;
+		if (continueToRange) {
+			delta = delta.Value.normalized * range;
+		}
 	}
 	
 	protected override int Cost () {
