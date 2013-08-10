@@ -18,6 +18,10 @@ public class Move : Ability {
 		return 0;
 	}
 	
+	public void Stop () {
+		delta = null;
+	}
+	
 	public void Update () {
 		if (delta != null) {
 			Vector3 normlizedDelta = delta.Value.normalized * speed * Time.deltaTime;

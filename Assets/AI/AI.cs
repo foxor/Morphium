@@ -24,6 +24,7 @@ public class AI : MonoBehaviour {
 	protected State Reevaluate() {
 		Vector3 delta = Target.transform.position - transform.position;
 		if (delta.sqrMagnitude < ATTACK_OUTER_LIMIT_SQUARED) {
+			movement.Stop();
 			return State.Attack;
 		}
 		return State.Approach;
