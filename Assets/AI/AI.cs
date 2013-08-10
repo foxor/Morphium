@@ -10,8 +10,9 @@ public class AI : MonoBehaviour {
 		Idle
 	}
 	
-	public const float EVALUATION_TIMER = 0.3f;
-	public const float ATTACK_OUTER_LIMIT_SQUARED = 10f * 10f;
+	protected const float EVALUATION_TIMER = 0.3f;
+	protected const float STRAFE_RADIUS = 7f;
+	protected const float ATTACK_OUTER_LIMIT_SQUARED = 10f * 10f;
 	
 	protected Target target;
 	
@@ -32,13 +33,11 @@ public class AI : MonoBehaviour {
 			return State.Idle;
 		}
 		
-		if (target.gameObject.layer == gameObject.layer) {
-			Debug.Log("Friendly fire!");
-		}
-		
 		Vector3 delta = target.transform.position - transform.position;
 		if (delta.sqrMagnitude < ATTACK_OUTER_LIMIT_SQUARED) {
 			movement.Stop();
+			Vector2 strafeDelta = Random.insideUnitCircle.normalized * STRAFE_RADIUS;
+			movement.TryCast(true, new Vector3(strafeDelta.x, transform.position.y, strafeDelta.y));
 			return State.Attack;
 		}
 		return State.Approach;

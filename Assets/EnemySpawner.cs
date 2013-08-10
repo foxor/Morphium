@@ -12,8 +12,6 @@ public class EnemySpawner : MonoBehaviour {
 		if (Time.time > nextSpawn) {
 			nextSpawn = Time.time + cooldown;
 			GameObject enemy = (GameObject)Instantiate(prefab);
-			AI brain = enemy.GetComponent<AI>();
-			//brain.Target = gameObject;
 			Vector2 circle = Random.insideUnitCircle.normalized * distance;
 			enemy.transform.position = transform.position + new Vector3(circle.x, 0f, circle.y);
 		}
