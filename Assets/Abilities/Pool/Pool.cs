@@ -12,7 +12,7 @@ public class Pool : Ability {
 	protected override void Cast (Vector3 t) {
 		GameObject pool = (GameObject)Instantiate(prefab);
 		pool.transform.position = transform.position;
-		pool.GetComponent<DamageDuringContact>().damage = damage;
+		pool.GetComponent<DamageDuringContact>().damagePerSecond = damage;
 		pool.layer = gameObject.layer;
 		pool.GetComponent<Duration>().Lifetime = duration;
 	}
