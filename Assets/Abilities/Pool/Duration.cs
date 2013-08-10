@@ -20,6 +20,5 @@ public class Duration : MonoBehaviour {
 		if (Time.time > alarm) {
 			Destroy(gameObject);
 		}
-		Debug.Log(Time.time - alarm + " : " + Time.time);
 	}
 }
