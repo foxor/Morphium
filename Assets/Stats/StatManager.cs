@@ -19,7 +19,7 @@ public class StatManager : MonoBehaviour {
 		}
 	}
 	
-	public void DealDamage(Damage damage, bool stopRegen) {
+	public void DealDamage(Damage damage, bool stopRegen, DamageDealer damageDealer) {
 		if (damage.Magnitude == 0 || this == null) {
 			return;
 		}
@@ -29,7 +29,22 @@ public class StatManager : MonoBehaviour {
 		}
 		damaged.Current -= damage.Magnitude;
 		if (damaged.Current <= 0) {
+			if (damageDealer != null && damageDealer.Owner != null) {
+				StatManager killer = damageDealer.Owner.GetComponent<StatManager>();
+				if (killer != null) {
+					killer.AwardKill(gameObject);
+				}
+			}
+			
 			Destroy(gameObject);
+		}
+	}
+	
+	protected void AwardKill(GameObject killed) {
+		foreach (StatType s in Enum.GetValues(typeof(StatType))) {
+			stats[s].Max *= 6;
+			stats[s].Max /= 5;
+			stats[s].Current = stats[s].Max;
 		}
 	}
 	

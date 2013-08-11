@@ -33,7 +33,7 @@ public class DamageDuringContact : DamageDealer {
 	public void Update() {
 		foreach (StatManager manager in nextDamageTime.Keys.ToArray()) {
 			while (nextDamageTime[manager] < Time.time) {
-				manager.DealDamage(singleTickDamage, true);
+				manager.DealDamage(singleTickDamage, true, this);
 				nextDamageTime[manager] += damageTickInterval;
 			}
 		}

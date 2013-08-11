@@ -7,7 +7,7 @@ public class ProjectileDamage : DamageDealer {
 	protected override void Enter(GameObject other) {
 		StatManager manager = other.GetComponent<StatManager>();
 		if (manager != null) {
-			manager.DealDamage(damage, true);
+			manager.DealDamage(damage, true, this);
 			Destroy(gameObject);
 		}
 	}

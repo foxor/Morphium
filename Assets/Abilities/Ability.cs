@@ -43,7 +43,7 @@ public abstract class Ability : MonoBehaviour {
 			int cost = Cost();
 			if (cost == 0 || statManager == null || statManager.GetCurrent(StatType.Charge) > cost) {
 				if (statManager != null && cost > 0) {
-					statManager.DealDamage(new Damage(){Magnitude = cost, Type = Element.Plasma}, false);
+					statManager.DealDamage(new Damage(){Magnitude = cost, Type = Element.Plasma}, false, null);
 				}
 				castComplete = Time.time + castTime;
 				nextIdle = castComplete + cooldown;
