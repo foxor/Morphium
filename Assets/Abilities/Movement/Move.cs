@@ -15,6 +15,7 @@ public class Move : Ability {
 	protected override void Cast (Vector3 target) {
 		target.y = transform.position.y;
 		delta = target - transform.position;
+		transform.rotation = Quaternion.LookRotation(delta.Value.normalized);
 		if (continueToRange) {
 			delta = delta.Value.normalized * range;
 		}
