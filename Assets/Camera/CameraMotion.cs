@@ -12,6 +12,8 @@ public class CameraMotion : MonoBehaviour {
 	}
 	
 	public void LateUpdate() {
-		transform.position = follow.transform.position + offset;
+		if (follow != null) {
+			transform.position = follow.transform.position + offset;
+		}
 	}
 }
