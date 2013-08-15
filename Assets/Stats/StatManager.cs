@@ -4,9 +4,14 @@ using System.Collections.Generic;
 
 public class StatManager : MonoBehaviour {
 	protected Dictionary<StatType, Stat> stats;
+	protected DeathHandler deathHandler;
+	
+	public void Awake() {
+		deathHandler = GetComponent<DeathHandler>();
+		stats = new Dictionary<StatType, Stat>();
+	}
 	
 	public void Start() {
-		stats = new Dictionary<StatType, Stat>();
 		Dictionary<StatType, int> boosts = GetComponent<ItemManager>().Boosts();
 		foreach (StatType statType in Enum.GetValues(typeof(StatType))) {
 			stats[statType] = new Stat(){
@@ -36,7 +41,13 @@ public class StatManager : MonoBehaviour {
 				}
 			}
 			
-			Destroy(gameObject);
+			deathHandler.OnDeath();
+		}
+	}
+	
+	public void Reset() {
+		foreach (StatType s in Enum.GetValues(typeof(StatType))) {
+			stats[s].Current = stats[s].Max;
 		}
 	}
 	
