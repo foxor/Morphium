@@ -20,4 +20,14 @@ public class Item {
 	public Ability GrantedAbility {
 		get; set;
 	}
+	public Texture Icon {
+		get; set;
+	}
+	
+	protected int RandomValue = Random.Range(0, 10000);
+	public int Value {
+		get {
+			return RandomValue;
+		}
+	}
 }

@@ -6,6 +6,7 @@ public class ItemManager : MonoBehaviour {
 	protected Dictionary<Slot, Item> items;
 	
 	public Ability omniGrant;
+	public Texture omniIcon;
 	
 	public void Awake() {
 		items = new Dictionary<Slot, Item>();
@@ -16,7 +17,8 @@ public class ItemManager : MonoBehaviour {
 				HealthBoost = 2,
 				ChargeBoost = 2,
 				OffStatType = StatType.Sensors,
-				GrantedAbility = omniGrant
+				GrantedAbility = omniGrant,
+				Icon = omniIcon
 			};
 		}
 	}

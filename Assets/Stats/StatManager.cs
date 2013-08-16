@@ -35,7 +35,7 @@ public class StatManager : MonoBehaviour {
 		damaged.Current -= damage.Magnitude;
 		if (damaged.Current <= 0) {
 			if (damageDealer != null && damageDealer.Owner != null) {
-				StatManager killer = damageDealer.Owner.GetComponent<StatManager>();
+				KillHandler killer = damageDealer.Owner.GetComponent<KillHandler>();
 				if (killer != null) {
 					killer.AwardKill(gameObject);
 				}
@@ -51,7 +51,7 @@ public class StatManager : MonoBehaviour {
 		}
 	}
 	
-	protected void AwardKill(GameObject killed) {
+	public void AwardKill(GameObject killed) {
 		foreach (StatType s in Enum.GetValues(typeof(StatType))) {
 			stats[s].Max *= 6;
 			stats[s].Max /= 5;
