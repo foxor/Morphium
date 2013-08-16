@@ -4,7 +4,7 @@ using System.Linq;
 
 public class DamageDuringContact : DamageDealer {
 	
-	public Damage damagePerSecond = new Damage(){ Magnitude = 4, Type = Element.Physical};
+	public Damage damagePerSecond = new Damage(){ Magnitude = 400, Type = Element.Physical};
 	
 	protected float damageTickInterval;
 	protected Damage singleTickDamage;
