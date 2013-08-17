@@ -5,8 +5,16 @@ public class DeathHandler : MonoBehaviour {
 	
 	protected bool isPlayer;
 	
+	protected bool isDead;
+	public bool IsDead {
+		get {
+			return isDead;
+		}
+	}
+	
 	public void Awake() {
 		isPlayer = (GetComponent<HealthBar>() != null);
+		isDead = false;
 	}
 	
 	public void OnDeath() {
@@ -16,6 +24,7 @@ public class DeathHandler : MonoBehaviour {
 		}
 		else {
 			Destroy(gameObject);
+			isDead = true;
 		}
 	}
 }

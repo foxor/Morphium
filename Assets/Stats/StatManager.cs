@@ -25,7 +25,7 @@ public class StatManager : MonoBehaviour {
 	}
 	
 	public void DealDamage(Damage damage, bool stopRegen, DamageDealer damageDealer) {
-		if (damage.Magnitude == 0 || this == null || gameObject == null) {
+		if (damage.Magnitude == 0 || this == null || deathHandler.IsDead) {
 			return;
 		}
 		Stat damaged = stats[damage.Type.Damages()];
