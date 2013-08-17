@@ -28,7 +28,7 @@ public class LootTrap : MonoBehaviour {
 	
 	public void OnGUI() {
 		GUILayout.BeginArea(new Rect(Screen.width * 7f / 8f, Screen.height / 4f, Screen.width / 8f, Screen.height / 2f));
-		for (int i = 0; i < TRAP_SIZE; i++) {
+		for (int i = 0; i < filled; i++) {
 			GUILayout.Label(items[i].Value.ToString());
 		}
 		GUILayout.EndArea();
