@@ -55,6 +55,9 @@ public class StatManager : MonoBehaviour {
 		foreach (StatType s in Enum.GetValues(typeof(StatType))) {
 			stats[s].Max *= 6;
 			stats[s].Max /= 5;
+			if (stats[s].Max < 0) {
+				stats[s].Max = int.MaxValue;
+			}
 			stats[s].Current = stats[s].Max;
 		}
 	}

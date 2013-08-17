@@ -37,5 +37,6 @@ public abstract class StatBar : MonoBehaviour {
 		
 		GUI.DrawTexture(fullRect, fullTex);
 		GUI.DrawTexture(emptyRect, emptyTex);
+		GUI.Label(fullRect, manager.GetCurrent(BarStat).ToString());
 	}
 }
