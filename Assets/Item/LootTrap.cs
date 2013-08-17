@@ -15,14 +15,17 @@ public class LootTrap : MonoBehaviour {
 	public void AddItem(Item item) {
 		// Cases:
 		// filled = 0: start at -1, drop out of loop and put the item in.  This is the first item, so it goes in
-		// filled = TRAP_SIZE: walk up the trap, looking for the first item worth more than this one
+		// filled = TRAP_SIZE, valuable item: walk up the trap, looking for the first item worth more than this one
+		// filled = TRAP_SIZE, worthless item: do nothing
 		int place;
 		for (place = Mathf.Min(TRAP_SIZE - 1, filled - 1); place >= 0 && item.Value > items[place].Value; place--) {
 			if (place < TRAP_SIZE - 1) {
 				items[place + 1] = items[place];
 			}
 		}
-		items[place + 1] = item;
+		if (++place < TRAP_SIZE) {
+			items[place] = item;
+		}
 		filled = Mathf.Min(TRAP_SIZE, filled + 1);
 	}
 	
