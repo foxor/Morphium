@@ -25,4 +25,12 @@ public class LootTrap : MonoBehaviour {
 		items[place + 1] = item;
 		filled = Mathf.Min(TRAP_SIZE, filled + 1);
 	}
+	
+	public void OnGUI() {
+		GUILayout.BeginArea(new Rect(Screen.width * 7f / 8f, Screen.height / 4f, Screen.width / 8f, Screen.height / 2f));
+		for (int i = 0; i < TRAP_SIZE; i++) {
+			GUILayout.Label(items[i].Value.ToString());
+		}
+		GUILayout.EndArea();
+	}
 }
