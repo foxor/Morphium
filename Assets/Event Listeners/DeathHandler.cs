@@ -20,7 +20,7 @@ public class DeathHandler : MonoBehaviour {
 	public void OnDeath() {
 		if (isPlayer) {
 			GetComponent<StatManager>().Reset();
-			Application.LoadLevel("Adventure");
+			Application.LoadLevel("Shop");
 		}
 		else {
 			Destroy(gameObject);
