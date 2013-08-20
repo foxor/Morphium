@@ -18,7 +18,7 @@ public class KillHandler : MonoBehaviour {
 		}
 		if (lootTrap != null) {
 			lootTrap.AddItem(new Item() {
-			});
+			}, killed.transform.position);
 		}
 	}
 }
