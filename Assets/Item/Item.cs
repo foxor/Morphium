@@ -11,7 +11,7 @@ public class Item {
 	public int HealthBoost {
 		get; set;
 	}
-	public int ChargeBoost {
+	public int MorphiumBoost {
 		get; set;
 	}
 	public StatType OffStatType {

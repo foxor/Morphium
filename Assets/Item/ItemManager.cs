@@ -15,7 +15,7 @@ public class ItemManager : MonoBehaviour {
 				StatBoost = 2,
 				OffStatBoost = 2,
 				HealthBoost = 2,
-				ChargeBoost = 2,
+				MorphiumBoost = 2,
 				OffStatType = StatType.Sensors,
 				GrantedAbility = omniGrant,
 				Icon = omniIcon
@@ -32,7 +32,7 @@ public class ItemManager : MonoBehaviour {
 			boosts[slot.Boosts()] += items[slot].StatBoost;
 			boosts[items[slot].OffStatType] += items[slot].OffStatBoost;
 			boosts[StatType.Health] += items[slot].HealthBoost;
-			boosts[StatType.Charge] += items[slot].ChargeBoost;
+			boosts[StatType.Morphium] += items[slot].MorphiumBoost;
 		}
 		return boosts;
 	}

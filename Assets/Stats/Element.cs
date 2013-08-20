@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 
 public enum Element {
-	[AssociatedStatType(StatType.Charge)]
+	[AssociatedStatType(StatType.Morphium)]
 	Plasma,
 	
 	[AssociatedStatType(StatType.Speed)]
@@ -19,7 +19,7 @@ public enum Element {
 	[AssociatedStatType(StatType.Bandwidth)]
 	Hack,
 	
-	[AssociatedStatType(StatType.Morphium)]
+	[AssociatedStatType(StatType.Source)]
 	Electric
 }
 

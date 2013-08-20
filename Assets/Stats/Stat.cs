@@ -33,7 +33,7 @@ public enum StatType {
 	Attack,
 	Speed,
 	Bandwidth,
-	Charge,
+	Source,
 	Health,
 	Morphium
 }

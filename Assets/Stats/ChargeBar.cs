@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class ChargeBar : StatBar {
 	protected override StatType BarStat {
 		get {
-			return StatType.Charge;
+			return StatType.Morphium;
 		}
 	}
 	
