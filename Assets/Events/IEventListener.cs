@@ -13,11 +13,11 @@ public interface IEventListener<ENUM_TYPE, CALLBACK_TYPE> where CALLBACK_TYPE : 
 	void Broadcast(ENUM_TYPE trigger, CALLBACK_TYPE data);
 }
 
-public abstract class EventListener<E, C> : IEventListener<E, C> {
+public class EventListener<E, C> : IEventListener<E, C> where C : EventData {
 	protected Dictionary<E, List<Callback<C>>> callbacks;
 	
 	public EventListener() {
-		callbacks = new Dictionary<E, List<C>>();
+		callbacks = new Dictionary<E, List<Callback<C>>>();
 	}
 	
 	public void AddCallback (E trigger, Callback<C> callback) {
@@ -41,5 +41,25 @@ public abstract class EventListener<E, C> : IEventListener<E, C> {
 				callback(data);
 			}
 		}
+	}
+}
+
+public abstract class EventListenerComponent<E, C> : MonoBehaviour, IEventListener<E, C> where C : EventData {
+	protected EventListener<E, C> eventBase;
+	
+	public void Awake() {
+		eventBase = new EventListener<E, C>();
+	}
+	
+	public void AddCallback (E trigger, Callback<C> callback) {
+		eventBase.AddCallback(trigger, callback);
+	}
+
+	public bool RemoveCallback (E trigger, Callback<C> callback) {
+		return eventBase.RemoveCallback(trigger, callback);
+	}
+
+	public void Broadcast (E trigger, C data) {
+		eventBase.Broadcast(trigger, data);
 	}
 }
