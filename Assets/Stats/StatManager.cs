@@ -14,18 +14,16 @@ public class StatManager : MonoBehaviour {
 	}
 	
 	public void Start() {
-		Dictionary<StatType, int> boosts = GetComponent<ItemManager>().Boosts();
-		foreach (StatType statType in Enum.GetValues(typeof(StatType))) {
-			stats[statType] = new Stat(){
-				Max = boosts[statType],
-				Current = boosts[statType],
-				SingleTickRegenTimer = 0.6f,
-				NextRegenTick = Time.time,
-				Regenerates = statType != StatType.Health
-			};
-		}
-		GetComponent<MorphidEventListener>().AddCallback(MorphidEvents.Kill, AwardKill);
+		Reset(null);
+		MorphidEventListener listener = GetComponent<MorphidEventListener>();
+		listener.AddCallback(MorphidEvents.Kill, AwardKill);
+		listener.AddCallback(MorphidEvents.Equip, Reset);
+		listener.AddCallback(MorphidEvents.Destroy, UnregisterGlobal);
 		GlobalEventListener.Listener().AddCallback(Level.Shop, Reset);
+	}
+	
+	protected void UnregisterGlobal(System.Object data) {
+		GlobalEventListener.Listener().RemoveCallback(Level.Shop, Reset);
 	}
 	
 	public void DealDamage(Damage damage, bool stopRegen, DamageDealer damageDealer) {
@@ -45,13 +43,20 @@ public class StatManager : MonoBehaviour {
 				}
 			}
 			
-			listener.Broadcast(MorphidEvents.Die, new MorphidEvent());
+			listener.Broadcast(MorphidEvents.Die, null);
 		}
 	}
 	
-	public void Reset(LevelChangeEventData data) {
-		foreach (StatType s in Enum.GetValues(typeof(StatType))) {
-			stats[s].Current = stats[s].Max;
+	public void Reset(System.Object data) {
+		Dictionary<StatType, int> boosts = GetComponent<ItemManager>().Boosts();
+		foreach (StatType statType in Enum.GetValues(typeof(StatType))) {
+			stats[statType] = new Stat(){
+				Max = boosts[statType],
+				Current = boosts[statType],
+				SingleTickRegenTimer = 0.6f,
+				NextRegenTick = Time.time,
+				Regenerates = statType != StatType.Health
+			};
 		}
 	}
 	

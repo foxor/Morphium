@@ -27,4 +27,8 @@ public class DeathHandler : MonoBehaviour {
 			isDead = true;
 		}
 	}
+	
+	public void OnDestroy() {
+		GetComponent<MorphidEventListener>().Broadcast(MorphidEvents.Destroy, null);
+	}
 }

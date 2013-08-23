@@ -23,6 +23,10 @@ public class ItemManager : MonoBehaviour {
 		}
 	}
 	
+	public void SwitchItem(Item item) {
+		items[item.FilledSlot] = item;
+	}
+	
 	public Item GetSlotEquipped(Slot slot) {
 		return items[slot];
 	}

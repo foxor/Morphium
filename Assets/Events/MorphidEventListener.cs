@@ -4,7 +4,9 @@ using System.Collections.Generic;
 
 public enum MorphidEvents {
 	Kill,
-	Die
+	Die,
+	Equip,
+	Destroy
 }
 
 public class MorphidEvent : EventData {

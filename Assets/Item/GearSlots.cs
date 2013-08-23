@@ -9,7 +9,10 @@ public class GearSlots : MonoBehaviour {
 	
 	public Texture omniTexture;
 	
-	protected LootTrap itemSource;
+	protected LootTrap lootTrap;
+	protected ItemManager itemManager;
+	protected MorphidEventListener listener;
+	
 	protected Rect[] destinations;
 	protected TrapEntry[] entries;
 	
@@ -22,7 +25,7 @@ public class GearSlots : MonoBehaviour {
 		set {
 			if (held != null) {
 				if (heldStart >= 0) {
-					StartCoroutine(itemSource.TweenPos(held, destination(heldStart)));
+					StartCoroutine(lootTrap.TweenPos(held, destination(heldStart)));
 					heldStart = -1;
 				}
 				else {
@@ -32,13 +35,15 @@ public class GearSlots : MonoBehaviour {
 							if (entries[place].TestIntersect()) {
 								equipped = true;
 								held.OccupiedRect = new Rect(entries[place].OccupiedRect.x, entries[place].OccupiedRect.y, ENTRY_SIZE, ENTRY_SIZE);
-								itemSource.AddItem(entries[place]);
+								lootTrap.AddItem(entries[place]);
 								entries[place] = held;
+								itemManager.SwitchItem(Held.TrappedItem);
+								listener.Broadcast(MorphidEvents.Equip, null);
 							}
 						}
 					}
 					if (!equipped) {
-						itemSource.AddItem(held);
+						lootTrap.AddItem(held);
 					}
 				}
 			}
@@ -46,8 +51,10 @@ public class GearSlots : MonoBehaviour {
 		}
 	}
 	
-	public new void Awake() {
-		itemSource = GetComponent<LootTrap>();
+	public void Awake() {
+		lootTrap = GetComponent<LootTrap>();
+		itemManager = GetComponent<ItemManager>();
+		listener = GetComponent<MorphidEventListener>();
 	}
 	
 	public void Start() {
@@ -80,7 +87,7 @@ public class GearSlots : MonoBehaviour {
 	
 	public void Update() {
 		if (Input.GetMouseButtonDown(0)) {
-			Held = itemSource.MouseOver();
+			Held = lootTrap.MouseOver();
 			if (Held == null) {
 				for (int place = 0; place < GEAR_NUM; place++) {
 					if (entries[place].TestIntersect()) {
@@ -91,7 +98,7 @@ public class GearSlots : MonoBehaviour {
 				}
 			}
 			else {
-				itemSource.RemoveItem(Held);
+				lootTrap.RemoveItem(Held);
 			}
 		}
 		if (Input.GetMouseButtonUp(0)) {

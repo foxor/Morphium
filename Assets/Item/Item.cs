@@ -23,6 +23,9 @@ public class Item {
 	public Texture Icon {
 		get; set;
 	}
+	public Slot FilledSlot {
+		get; set;
+	}
 	
 	protected int RandomValue = Random.Range(0, 10000);
 	public int Value {
