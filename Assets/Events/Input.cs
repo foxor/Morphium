@@ -1,5 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class InputListener : MonoBehaviour {
+public enum InputEvent {
 }

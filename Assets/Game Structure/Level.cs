@@ -1,5 +1,7 @@
 using UnityEngine;
+using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 public enum Level {
 	[LevelId(0)]
@@ -12,11 +14,17 @@ public enum Level {
 	Adventure
 }
 
+public enum LoadState {
+	Begin,
+	Loaded,
+	Unloaded
+}
+
 public static class LevelExtension {
 	public static int GetId(this Level e) {
 		FieldInfo fi = typeof(Level).GetField(e.ToString());
-		foreach (LevelId stat in fi.GetCustomAttributes(typeof(LevelId), false) as LevelId[]) {
-			return stat.stat;
+		foreach (LevelId id in fi.GetCustomAttributes(typeof(LevelId), false) as LevelId[]) {
+			return id.id;
 		}
 		throw new Exception("Element has no associated stat");
 	}

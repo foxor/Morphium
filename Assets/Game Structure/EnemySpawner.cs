@@ -2,8 +2,6 @@ using UnityEngine;
 using System.Collections;
 
 public class EnemySpawner : MonoBehaviour {
-	protected static EnemySpawner singleton;
-	
 	public float cooldown;
 	public float distance;
 	public GameObject prefab;
@@ -11,15 +9,12 @@ public class EnemySpawner : MonoBehaviour {
 	protected float nextSpawn;
 	
 	public void Awake() {
-		singleton = this;
+		GlobalEventListener listener = GetComponent<GlobalEventListener>();
+		listener.AddCallback(Level.Adventure, OnLoadAdventure);
 	}
 	
-	public static void Disable() {
-		singleton.enabled = false;
-	}
-	
-	public static void Enable() {
-		singleton.enabled = true;
+	public void OnLoadAdventure(LevelChangeEventData data) {
+		enabled = data.Action == LoadState.Loaded;
 	}
 	
 	public void Update() {
