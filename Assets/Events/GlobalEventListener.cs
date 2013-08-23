@@ -21,12 +21,19 @@ public class GlobalEventListener :
 	IEventListener<Level, LevelChangeEventData>,
 	IEventListener<InputEvent, InputEventData>
 {
+	protected static GlobalEventListener singleton;
+	
 	protected EventListener<Level, LevelChangeEventData> levelChangeListener;
 	protected EventListener<InputEvent, InputEventData> inputListener;
 	
 	public void Awake() {
 		levelChangeListener = new EventListener<Level, LevelChangeEventData>();
 		inputListener = new EventListener<InputEvent, InputEventData>();
+		singleton = this;
+	}
+	
+	public static GlobalEventListener Listener() {
+		return singleton;
 	}
 	
 	public void AddCallback (InputEvent trigger, Callback<InputEventData> callback) {

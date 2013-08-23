@@ -21,8 +21,11 @@ public class EventListener<E, C> : IEventListener<E, C> where C : EventData {
 	}
 	
 	public void AddCallback (E trigger, Callback<C> callback) {
-		List<Callback<C>> registered = callbacks[trigger];
-		if (registered == null) {
+		List<Callback<C>> registered;
+		if (callbacks.ContainsKey(trigger)) {
+			registered = callbacks[trigger];
+		}
+		else {
 			registered = new List<Callback<C>>();
 			callbacks[trigger] = registered;
 		}
@@ -35,10 +38,12 @@ public class EventListener<E, C> : IEventListener<E, C> where C : EventData {
 	}
 
 	public void Broadcast (E trigger, C data) {
-		List<Callback<C>> registered = callbacks[trigger];
-		if (registered != null) {
-			foreach (Callback<C> callback in registered) {
-				callback(data);
+		if (callbacks.ContainsKey(trigger)) {
+			List<Callback<C>> registered = callbacks[trigger];
+			if (registered != null) {
+				foreach (Callback<C> callback in registered) {
+					callback(data);
+				}
 			}
 		}
 	}

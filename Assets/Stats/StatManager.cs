@@ -22,6 +22,8 @@ public class StatManager : MonoBehaviour {
 				Regenerates = statType != StatType.Health
 			};
 		}
+		GetComponent<MorphidEventListener>().AddCallback(MorphidEvents.Kill, AwardKill);
+		GlobalEventListener.Listener().AddCallback(Level.Shop, Reset);
 	}
 	
 	public void DealDamage(Damage damage, bool stopRegen, DamageDealer damageDealer) {
@@ -35,9 +37,9 @@ public class StatManager : MonoBehaviour {
 		damaged.Current -= damage.Magnitude;
 		if (damaged.Current <= 0) {
 			if (damageDealer != null && damageDealer.Owner != null) {
-				KillHandler killer = damageDealer.Owner.GetComponent<KillHandler>();
+				MorphidEventListener killer = damageDealer.Owner.GetComponent<MorphidEventListener>();
 				if (killer != null) {
-					killer.AwardKill(gameObject);
+					killer.Broadcast(MorphidEvents.Kill, new MorphidEvent(){other = gameObject});
 				}
 			}
 			
@@ -45,13 +47,13 @@ public class StatManager : MonoBehaviour {
 		}
 	}
 	
-	public void Reset() {
+	public void Reset(LevelChangeEventData data) {
 		foreach (StatType s in Enum.GetValues(typeof(StatType))) {
 			stats[s].Current = stats[s].Max;
 		}
 	}
 	
-	public void AwardKill(GameObject killed) {
+	public void AwardKill(MorphidEvent killed) {
 		foreach (StatType s in Enum.GetValues(typeof(StatType))) {
 			stats[s].Max *= 6;
 			stats[s].Max /= 5;

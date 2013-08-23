@@ -8,10 +8,10 @@ public enum Level {
 	Start,
 	
 	[LevelId(1)]
-	Shop,
+	Adventure,
 	
 	[LevelId(2)]
-	Adventure
+	Shop
 }
 
 public enum LoadState {

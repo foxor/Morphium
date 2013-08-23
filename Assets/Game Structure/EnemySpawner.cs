@@ -8,9 +8,10 @@ public class EnemySpawner : MonoBehaviour {
 	
 	protected float nextSpawn;
 	
-	public void Awake() {
+	public void Start() {
 		GlobalEventListener listener = GetComponent<GlobalEventListener>();
 		listener.AddCallback(Level.Adventure, OnLoadAdventure);
+		enabled = false;
 	}
 	
 	public void OnLoadAdventure(LevelChangeEventData data) {

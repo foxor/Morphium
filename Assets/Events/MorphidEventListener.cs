@@ -7,5 +7,9 @@ public enum MorphidEvents {
 	Die
 }
 
-public class MorphidEventListener : EventListener<MorphidEvents, EventData> {
+public class MorphidEvent : EventData {
+	public GameObject other;
+}
+
+public class MorphidEventListener : EventListenerComponent<MorphidEvents, MorphidEvent> {
 }
