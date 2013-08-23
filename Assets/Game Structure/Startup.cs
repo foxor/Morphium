@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 
 public class Startup : MonoBehaviour {
-	public void Awake() {
+	public void Start() {
 		LevelManager.LoadLevel(Level.Shop);
 	}
 }

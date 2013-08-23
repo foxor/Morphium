@@ -23,6 +23,10 @@ public class ItemManager : MonoBehaviour {
 		}
 	}
 	
+	public Item GetSlotEquipped(Slot slot) {
+		return items[slot];
+	}
+	
 	public Dictionary<StatType, int> Boosts() {
 		Dictionary<StatType, int> boosts = new Dictionary<StatType, int>();
 		foreach (StatType statType in Enum.GetValues(typeof(StatType))) {
