@@ -12,12 +12,13 @@ public class DeathHandler : MonoBehaviour {
 		}
 	}
 	
-	public void Awake() {
+	public void Start() {
 		isPlayer = (GetComponent<HealthBar>() != null);
 		isDead = false;
+		GetComponent<MorphidEventListener>().AddCallback(MorphidEvents.Die, OnDeath);
 	}
 	
-	public void OnDeath() {
+	public void OnDeath(MorphidEvent data) {
 		if (isPlayer) {
 			LevelManager.LoadLevel(Level.Shop);
 		}

@@ -4,9 +4,11 @@ using System.Collections.Generic;
 
 public class StatManager : MonoBehaviour {
 	protected Dictionary<StatType, Stat> stats;
+	protected MorphidEventListener listener;
 	protected DeathHandler deathHandler;
 	
 	public void Awake() {
+		listener = GetComponent<MorphidEventListener>();
 		deathHandler = GetComponent<DeathHandler>();
 		stats = new Dictionary<StatType, Stat>();
 	}
@@ -43,7 +45,7 @@ public class StatManager : MonoBehaviour {
 				}
 			}
 			
-			deathHandler.OnDeath();
+			listener.Broadcast(MorphidEvents.Die, new MorphidEvent());
 		}
 	}
 	
