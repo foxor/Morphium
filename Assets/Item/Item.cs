@@ -27,10 +27,9 @@ public class Item {
 		get; set;
 	}
 	
-	protected int RandomValue = Random.Range(0, 10000);
 	public int Value {
 		get {
-			return RandomValue;
+			return StatBoost + OffStatBoost + HealthBoost + MorphiumBoost;
 		}
 	}
 }
