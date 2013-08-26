@@ -64,12 +64,8 @@ public class LootTrap : MonoBehaviour {
 	
 	public void RemoveItem(TrapEntry entry) {
 		bool encountered = false;
-		int found = 0;
 		for (int place = 0; place < filled; place++) {
-			if (entry == entries[place]) {
-				encountered = true;
-			}
-			else if (encountered) {
+			if (encountered |= (entry == entries[place])) {
 				if (place < filled - 1) {
 					entries[place] = entries[place + 1];
 					StartCoroutine(TweenPos(entries[place], destination(place)));
@@ -78,11 +74,8 @@ public class LootTrap : MonoBehaviour {
 					entries[place] = null;
 				}
 			}
-			if (entries[place] != null) {
-				found = place;
-			}
 		}
-		filled = found;
+		filled = Mathf.Max(0, filled - (encountered ? 1 : 0));
 		Debug.Log("Removed an item, filled is now: " + filled);
 	}
 	
