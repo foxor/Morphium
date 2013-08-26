@@ -16,35 +16,27 @@ public class GearSlots : MonoBehaviour {
 	protected Rect[] destinations;
 	protected TrapEntry[] entries;
 	
-	protected int heldStart;
 	protected TrapEntry held;
 	protected TrapEntry Held {
 		get {
 			return held;
 		}
 		set {
-			if (held != null) {
-				if (heldStart >= 0) {
-					StartCoroutine(lootTrap.TweenPos(held, destination(heldStart)));
-					heldStart = -1;
+			bool equipped = false;
+			if (held != null && value == null) {
+				for (int place = 0; place < GEAR_NUM; place++) {
+					if (entries[place].TestIntersect()) {
+						Debug.Log("Equipping item");
+						equipped = true;
+						held.OccupiedRect = new Rect(entries[place].OccupiedRect.x, entries[place].OccupiedRect.y, ENTRY_SIZE, ENTRY_SIZE);
+						lootTrap.AddItem(entries[place]);
+						entries[place] = held;
+						itemManager.SwitchItem(Held.TrappedItem);
+						listener.Broadcast(MorphidEvents.Equip, null);
+					}
 				}
-				else {
-					bool equipped = false;
-					if (value == null) {
-						for (int place = 0; place < GEAR_NUM; place++) {
-							if (entries[place].TestIntersect()) {
-								equipped = true;
-								held.OccupiedRect = new Rect(entries[place].OccupiedRect.x, entries[place].OccupiedRect.y, ENTRY_SIZE, ENTRY_SIZE);
-								lootTrap.AddItem(entries[place]);
-								entries[place] = held;
-								itemManager.SwitchItem(Held.TrappedItem);
-								listener.Broadcast(MorphidEvents.Equip, null);
-							}
-						}
-					}
-					if (!equipped) {
-						lootTrap.AddItem(held);
-					}
+				if (!equipped) {
+					lootTrap.AddItem(held);
 				}
 			}
 			held = value;
@@ -88,16 +80,7 @@ public class GearSlots : MonoBehaviour {
 	public void Update() {
 		if (Input.GetMouseButtonDown(0)) {
 			Held = lootTrap.MouseOver();
-			if (Held == null) {
-				for (int place = 0; place < GEAR_NUM; place++) {
-					if (entries[place].TestIntersect()) {
-						Held = entries[place];
-						heldStart = place;
-						break;
-					}
-				}
-			}
-			else {
+			if (Held != null) {
 				lootTrap.RemoveItem(Held);
 			}
 		}

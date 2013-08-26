@@ -79,10 +79,11 @@ public class LootTrap : MonoBehaviour {
 				}
 			}
 			if (entries[place] != null) {
-				found = place + 1;
+				found = place;
 			}
 		}
 		filled = found;
+		Debug.Log("Removed an item, filled is now: " + filled);
 	}
 	
 	public IEnumerator TweenPos(TrapEntry entry, Rect eventual) {
