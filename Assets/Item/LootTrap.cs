@@ -64,19 +64,25 @@ public class LootTrap : MonoBehaviour {
 	
 	public void RemoveItem(TrapEntry entry) {
 		bool encountered = false;
-		filled = 0;
-		for (int place = 0; place < filled - 1; place++) {
+		int found = 0;
+		for (int place = 0; place < filled; place++) {
 			if (entry == entries[place]) {
 				encountered = true;
 			}
 			else if (encountered) {
-				entries[place] = entries[place + 1];
-				StartCoroutine(TweenPos(entries[place], destination(place)));
+				if (place < filled - 1) {
+					entries[place] = entries[place + 1];
+					StartCoroutine(TweenPos(entries[place], destination(place)));
+				}
+				else {
+					entries[place] = null;
+				}
 			}
 			if (entries[place] != null) {
-				filled = place + 1;
+				found = place + 1;
 			}
 		}
+		filled = found;
 	}
 	
 	public IEnumerator TweenPos(TrapEntry entry, Rect eventual) {
