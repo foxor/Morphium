@@ -25,8 +25,7 @@ public class GearSlots : MonoBehaviour {
 			bool equipped = false;
 			if (held != null && value == null) {
 				for (int place = 0; place < GEAR_NUM; place++) {
-					if (entries[place].TestIntersect()) {
-						Debug.Log("Equipping item");
+					if (held.TrappedItem.FilledSlot == entries[place].TrappedItem.FilledSlot && entries[place].TestIntersect()) {
 						equipped = true;
 						held.OccupiedRect = new Rect(entries[place].OccupiedRect.x, entries[place].OccupiedRect.y, ENTRY_SIZE, ENTRY_SIZE);
 						lootTrap.AddItem(entries[place]);
