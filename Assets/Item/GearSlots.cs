@@ -102,6 +102,15 @@ public class GearSlots : MonoBehaviour {
 			GUI.DrawTexture(Held.OccupiedRect, omniTexture);
 		}
 	}
+	
+	public TrapEntry MouseOver() {
+		foreach (TrapEntry entry in entries) {
+			if (entry.TestIntersect()) {
+				return entry;
+			}
+		}
+		return null;
+	}
 }
 
 public static class InputExtender {
