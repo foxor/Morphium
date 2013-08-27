@@ -18,7 +18,8 @@ public class ItemManager : MonoBehaviour {
 				MorphiumBoost = 2,
 				OffStatType = StatType.Sensors,
 				GrantedAbility = omniGrant,
-				Icon = omniIcon
+				Icon = omniIcon,
+				FilledSlot = slot
 			};
 		}
 	}
