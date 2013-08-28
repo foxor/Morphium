@@ -97,6 +97,7 @@ public class LootTrap : MonoBehaviour {
 	}
 	
 	public void OnGUI() {
+		GUI.depth = 2;
 		for (int i = 0; i < filled; i++) {
 			GUI.DrawTexture(entries[i].OccupiedRect, omniTexture);
 		}

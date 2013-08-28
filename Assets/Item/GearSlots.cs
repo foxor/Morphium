@@ -94,6 +94,7 @@ public class GearSlots : MonoBehaviour {
 	}
 	
 	public void OnGUI() {
+		GUI.depth = 1;
 		for (int i = 0; i < GEAR_NUM; i++) {
 			GUI.DrawTexture(entries[i].OccupiedRect, omniTexture);
 		}
