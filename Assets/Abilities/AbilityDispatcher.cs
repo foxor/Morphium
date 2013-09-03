@@ -12,7 +12,7 @@ public class AbilityDispatcher : MonoBehaviour {
 	
 	public void Update() {
 		Nullable<RaycastHit> raycast = ClickRaycast.GetLastHit();
-		if (raycast == null) {
+		if (raycast == null || Wall.isWall(raycast.Value)) {
 			return;
 		}
 		if (Input.GetKey(KeyCode.Q)) {

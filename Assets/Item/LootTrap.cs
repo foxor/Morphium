@@ -76,7 +76,6 @@ public class LootTrap : MonoBehaviour {
 			}
 		}
 		filled = Mathf.Max(0, filled - (encountered ? 1 : 0));
-		Debug.Log("Removed an item, filled is now: " + filled);
 	}
 	
 	public IEnumerator TweenPos(TrapEntry entry, Rect eventual) {
