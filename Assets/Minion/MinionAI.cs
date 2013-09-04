@@ -1,10 +1,21 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class MinionAI : AI {
+	
+	protected const float SQUARED_AGGRO_RANGE = 81f;
+	protected const float STRAFE_RADIUS = 7f;
+	
 	protected class MoveTowards : AI.Goal {
 		public Vector3 Destination {
+			get; set;
+		}
+	}
+	
+	protected class Attack : AI.Goal {
+		public Target Target {
 			get; set;
 		}
 	}
@@ -17,6 +28,11 @@ public class MinionAI : AI {
 		}
 	}
 	
+	protected Qualifier teamSelector;
+	
+	public void Start() {
+		teamSelector = TargetManager.IsOpposing(GetComponent<Target>());
+	}
 	
 	protected IEnumerator SetupLongTermGoal() {
 		while (goals == null) {
@@ -27,10 +43,30 @@ public class MinionAI : AI {
 	}
 	
 	protected override Goal Reevaluate () {
-		return null;
+		Target target = TargetManager.GetTargets()
+			.Where(x => x.gameObject != this.gameObject)
+			.Where(x => 
+				(x.gameObject.transform.position - transform.position)
+				.sqrMagnitude < SQUARED_AGGRO_RANGE)
+			.OrderBy(x => Random.Range(0f, 1f))
+			.ElementAt(0);
+		
+		if (target == null) {
+			return null;
+		}
+		
+		movement.Stop();
+		Vector2 strafeDelta = Random.insideUnitCircle.normalized * STRAFE_RADIUS;
+		movement.TryCast(true, new Vector3(strafeDelta.x, transform.position.y, strafeDelta.y));
+		return new Attack(){Target = target};
 	}
 
 	protected override void Process (Goal goal) {
-		movement.TryCast(false, ((MoveTowards)goal).Destination);
+		if (goal is Attack) {
+			projectile.TryCast(true, ((Attack)goal).Target.transform.position);
+		}
+		else if (goal is MoveTowards) {
+			movement.TryCast(true, ((MoveTowards)goal).Destination);
+		}
 	}
 }

@@ -8,8 +8,6 @@ public abstract class AI : MonoBehaviour {
 	}
 	
 	protected const float EVALUATION_TIMER = 0.3f;
-	protected const float STRAFE_RADIUS = 7f;
-	protected const float ATTACK_OUTER_LIMIT_SQUARED = 10f * 10f;
 	
 	protected Stack<Goal> goals;
 	protected Move movement;
@@ -17,27 +15,6 @@ public abstract class AI : MonoBehaviour {
 	protected float nextEvaluation;
 	
 	protected abstract Goal Reevaluate();
-	/*{ //TODO: refactor into morphid AI
-		target = TargetManager.GetTargets()
-			.Where(x => x.gameObject != this.gameObject)
-			.OrderBy(x => 
-				(x.gameObject.transform.position - transform.position)
-				.sqrMagnitude)
-			.ElementAt(0);
-		
-		if (target == null) {
-			return State.Idle;
-		}
-		
-		Vector3 delta = target.transform.position - transform.position;
-		if (delta.sqrMagnitude < ATTACK_OUTER_LIMIT_SQUARED) {
-			movement.Stop();
-			Vector2 strafeDelta = Random.insideUnitCircle.normalized * STRAFE_RADIUS;
-			movement.TryCast(true, new Vector3(strafeDelta.x, transform.position.y, strafeDelta.y));
-			return State.Attack;
-		}
-		return State.Approach;
-	}*/
 	
 	protected abstract void Process(Goal goal);
 	

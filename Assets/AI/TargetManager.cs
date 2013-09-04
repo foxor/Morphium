@@ -2,8 +2,11 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+	
+public delegate bool Qualifier(Target t);
 
 public class TargetManager : MonoBehaviour {
+	
 	protected static TargetManager singleton;
 	
 	protected HashSet<Target> targets;
@@ -23,5 +26,13 @@ public class TargetManager : MonoBehaviour {
 	
 	public static IEnumerable<Target> GetTargets() {
 		return singleton.targets.Where(x => x != null);
+	}
+	
+	public static IEnumerable<Target> GetTargets(Qualifier qualifier) {
+		return singleton.targets.Where(x => x != null && qualifier(x));
+	}
+	
+	public static Qualifier IsOpposing(Target myTeam) {
+		return x => x.Team != myTeam.Team;
 	}
 }

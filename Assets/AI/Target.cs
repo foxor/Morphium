@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 
 public class Target : MonoBehaviour {
+	public int Team;
+	
 	public void Start() {
 		TargetManager.AddTarget(this);
 	}

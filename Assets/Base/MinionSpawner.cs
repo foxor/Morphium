@@ -15,9 +15,11 @@ public class MinionSpawner : MonoBehaviour {
 	public MinionSpawner[] lanes;
 	
 	protected float nextSpawn;
+	protected Target target;
 	
 	public void Awake() {
 		nextSpawn = Time.time + SPAWN_TIMER;
+		target = GetComponent<Target>();
 	}
 	
 	public void Update() {
@@ -54,5 +56,6 @@ public class MinionSpawner : MonoBehaviour {
 		Vector3 delta = (lane.transform.position - transform.position).normalized * SPAWN_DISTANCE;
 		spawn.transform.position = transform.position + delta;
 		spawn.GetComponent<MinionAI>().LongTermGoal = lane.transform.position;
+		spawn.GetComponent<Target>().Team = target.Team;
 	}
 }
