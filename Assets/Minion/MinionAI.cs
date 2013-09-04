@@ -43,13 +43,13 @@ public class MinionAI : AI {
 	}
 	
 	protected override Goal Reevaluate () {
-		Target target = TargetManager.GetTargets()
+		Target target = TargetManager.GetTargets(teamSelector)
 			.Where(x => x.gameObject != this.gameObject)
 			.Where(x => 
 				(x.gameObject.transform.position - transform.position)
 				.sqrMagnitude < SQUARED_AGGRO_RANGE)
 			.OrderBy(x => Random.Range(0f, 1f))
-			.ElementAt(0);
+			.ElementAtOrDefault(0);
 		
 		if (target == null) {
 			return null;
