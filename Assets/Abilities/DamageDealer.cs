@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 
 public abstract class DamageDealer : MonoBehaviour {
+	public bool friendlyFire;
+	
 	public GameObject Owner {
 		get; set;
 	}
@@ -10,7 +12,7 @@ public abstract class DamageDealer : MonoBehaviour {
 	protected virtual void Enter(GameObject other) {
 	}
 	public void OnTriggerEnter(Collider other) {
-		if (other.gameObject != Owner) {
+		if (other.gameObject != Owner && (friendlyFire || Enemy(other))) {
 			Enter(other.gameObject);
 		}
 	}
@@ -18,7 +20,7 @@ public abstract class DamageDealer : MonoBehaviour {
 	protected virtual void Stay(GameObject other) {
 	}
 	public void OnTriggerStay(Collider other) {
-		if (other.gameObject != Owner) {
+		if (other.gameObject != Owner && (friendlyFire || Enemy(other))) {
 			Stay(other.gameObject);
 		}
 	}
@@ -26,9 +28,18 @@ public abstract class DamageDealer : MonoBehaviour {
 	protected virtual void Exit(GameObject other) {
 	}
 	public void OnTriggerExit(Collider other) {
-		if (other.gameObject != Owner) {
+		if (other.gameObject != Owner && (friendlyFire || Enemy(other))) {
 			Exit(other.gameObject);
 		}
+	}
+	
+	protected bool Enemy(Collider other) {
+		Target selfTarget = GetComponent<Target>();
+		Target otherTarget = other.GetComponent<Target>();
+		if (selfTarget == null || otherTarget == null) {
+			return true;
+		}
+		return selfTarget.Team != otherTarget.Team;
 	}
 }
 

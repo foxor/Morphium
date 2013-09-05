@@ -61,12 +61,16 @@ public class MinionAI : AI {
 		return new Attack(){Target = target};
 	}
 
-	protected override void Process (Goal goal) {
+	protected override bool Process (Goal goal) {
 		if (goal is Attack) {
+			if (((Attack)goal).Target == null) {
+				return false;
+			}
 			projectile.TryCast(true, ((Attack)goal).Target.transform.position);
 		}
 		else if (goal is MoveTowards) {
 			movement.TryCast(true, ((MoveTowards)goal).Destination);
 		}
+		return true;
 	}
 }

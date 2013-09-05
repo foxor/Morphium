@@ -16,7 +16,7 @@ public abstract class AI : MonoBehaviour {
 	
 	protected abstract Goal Reevaluate();
 	
-	protected abstract void Process(Goal goal);
+	protected abstract bool Process(Goal goal);
 	
 	public void Awake() {
 		nextEvaluation = 0f;
@@ -39,7 +39,9 @@ public abstract class AI : MonoBehaviour {
 		}
 		
 		if (goals.Any()) {
-			Process(goals.Peek());
+			if (!Process(goals.Peek())) {
+				goals.Pop();
+			}
 		}
 	}
 }
