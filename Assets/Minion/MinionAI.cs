@@ -7,8 +7,15 @@ public class MinionAI : AI {
 	
 	protected const float SQUARED_AGGRO_RANGE = 81f;
 	protected const float STRAFE_RADIUS = 7f;
+	protected const float SQUARED_STOP_RANGE = 0.5f;
 	
 	protected class MoveTowards : AI.Goal {
+		public Vector3 Destination {
+			get; set;
+		}
+	}
+	
+	protected class Juke : AI.Goal {
 		public Vector3 Destination {
 			get; set;
 		}
@@ -42,23 +49,31 @@ public class MinionAI : AI {
 		goals.Push(new MoveTowards(){Destination = longTermGoal});
 	}
 	
-	protected override Goal Reevaluate () {
-		Target target = TargetManager.GetTargets(teamSelector)
-			.Where(x => x.gameObject != this.gameObject)
-			.Where(x => 
-				(x.gameObject.transform.position - transform.position)
-				.sqrMagnitude < SQUARED_AGGRO_RANGE)
-			.OrderBy(x => Random.Range(0f, 1f))
-			.ElementAtOrDefault(0);
-		
-		if (target == null) {
-			return null;
+	protected override void Reevaluate () {
+		if (goals.Peek() is Attack) {
+			Target currentTarget = ((Attack)goals.Peek()).Target;
+			if (currentTarget == null || (currentTarget.transform.position - transform.position).sqrMagnitude > SQUARED_AGGRO_RANGE) {
+				goals.Pop();
+			}
 		}
 		
-		movement.Stop();
-		Vector2 strafeDelta = Random.insideUnitCircle.normalized * STRAFE_RADIUS;
-		movement.TryCast(true, new Vector3(strafeDelta.x, transform.position.y, strafeDelta.y));
-		return new Attack(){Target = target};
+		if (goals.Peek() is MoveTowards) {
+			Target target = TargetManager.GetTargets(teamSelector)
+				.Where(x => x.gameObject != this.gameObject)
+				.Where(x => 
+					(x.gameObject.transform.position - transform.position)
+					.sqrMagnitude < SQUARED_AGGRO_RANGE)
+				.OrderBy(x => Random.Range(0f, 1f))
+				.ElementAtOrDefault(0);
+			
+			if (target == null) {
+				return;
+			}
+			
+			goals.Push(new Attack(){Target = target});
+			Vector2 strafeDelta = Random.insideUnitCircle.normalized * STRAFE_RADIUS;
+			goals.Push(new Juke(){Destination = new Vector3(strafeDelta.x, transform.position.y, strafeDelta.y)});
+		}
 	}
 
 	protected override bool Process (Goal goal) {
@@ -68,8 +83,13 @@ public class MinionAI : AI {
 			}
 			projectile.TryCast(true, ((Attack)goal).Target.transform.position);
 		}
-		else if (goal is MoveTowards) {
-			movement.TryCast(true, ((MoveTowards)goal).Destination);
+		else if (goal is MoveTowards || goal is Juke) {
+			Vector3 destination = goal is MoveTowards ? ((MoveTowards)goal).Destination : ((Juke)goal).Destination;
+			if ((destination - transform.position).sqrMagnitude < SQUARED_STOP_RANGE) {
+				movement.Stop();
+				return false;
+			}
+			movement.TryCast(true, destination);
 		}
 		return true;
 	}

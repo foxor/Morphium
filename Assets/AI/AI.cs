@@ -14,7 +14,7 @@ public abstract class AI : MonoBehaviour {
 	protected Projectile projectile;
 	protected float nextEvaluation;
 	
-	protected abstract Goal Reevaluate();
+	protected abstract void Reevaluate();
 	
 	protected abstract bool Process(Goal goal);
 	
@@ -32,10 +32,7 @@ public abstract class AI : MonoBehaviour {
 	public void Update() {
 		if (Time.time > nextEvaluation) {
 			ResetTimer();
-			Goal newGoal = Reevaluate();
-			if (newGoal != null) {
-				goals.Push(newGoal);
-			}
+			Reevaluate();
 		}
 		
 		if (goals.Any()) {
