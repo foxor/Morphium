@@ -11,7 +11,7 @@ public class GearSlots : MonoBehaviour {
 	
 	protected LootTrap lootTrap;
 	protected ItemManager itemManager;
-	protected MorphidEventListener listener;
+	protected CharacterEventListener listener;
 	
 	protected Rect[] destinations;
 	protected TrapEntry[] entries;
@@ -31,7 +31,7 @@ public class GearSlots : MonoBehaviour {
 						lootTrap.AddItem(entries[place]);
 						entries[place] = held;
 						itemManager.SwitchItem(Held.TrappedItem);
-						listener.Broadcast(MorphidEvents.Equip, null);
+						listener.Broadcast(CharacterEvents.Equip, null);
 					}
 				}
 				if (!equipped) {
@@ -45,7 +45,7 @@ public class GearSlots : MonoBehaviour {
 	public void Awake() {
 		lootTrap = GetComponent<LootTrap>();
 		itemManager = GetComponent<ItemManager>();
-		listener = GetComponent<MorphidEventListener>();
+		listener = GetComponent<CharacterEventListener>();
 	}
 	
 	public void Start() {

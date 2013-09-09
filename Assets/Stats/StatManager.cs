@@ -2,23 +2,24 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 
-public class StatManager : MonoBehaviour {
+public abstract class StatManager : MonoBehaviour {
+	protected const float REGEN_TIMER = 0.6f;
+	
 	protected Dictionary<StatType, Stat> stats;
-	protected MorphidEventListener listener;
+	protected CharacterEventListener listener;
 	protected DeathHandler deathHandler;
 	
 	public void Awake() {
-		listener = GetComponent<MorphidEventListener>();
+		listener = GetComponent<CharacterEventListener>();
 		deathHandler = GetComponent<DeathHandler>();
 		stats = new Dictionary<StatType, Stat>();
 	}
 	
 	public void Start() {
 		Reset(null);
-		MorphidEventListener listener = GetComponent<MorphidEventListener>();
-		listener.AddCallback(MorphidEvents.Kill, AwardKill);
-		listener.AddCallback(MorphidEvents.Equip, Reset);
-		listener.AddCallback(MorphidEvents.Destroy, UnregisterGlobal);
+		listener.AddCallback(CharacterEvents.Kill, AwardKill);
+		listener.AddCallback(CharacterEvents.Equip, Reset);
+		listener.AddCallback(CharacterEvents.Destroy, UnregisterGlobal);
 		GlobalEventListener.Listener().AddCallback(Level.Shop, Reset);
 	}
 	
@@ -30,45 +31,44 @@ public class StatManager : MonoBehaviour {
 		if (damage.Magnitude == 0 || this == null || deathHandler.IsDead) {
 			return;
 		}
+		
 		Stat damaged = stats[damage.Type.Damages()];
 		if (damaged.Current == damaged.Max) {
 			damaged.NextRegenTick = Time.time + damaged.SingleTickRegenTimer + (stopRegen ? damaged.RegenCooldown : 0f);
 		}
+		else if (stopRegen) {
+			damaged.NextRegenTick += damaged.RegenCooldown;
+		}
+		
 		damaged.Current -= damage.Magnitude;
 		if (damaged.Current <= 0) {
 			if (damageDealer != null && damageDealer.Owner != null) {
-				MorphidEventListener killer = damageDealer.Owner.GetComponent<MorphidEventListener>();
+				CharacterEventListener killer = damageDealer.Owner.GetComponent<CharacterEventListener>();
 				if (killer != null) {
-					killer.Broadcast(MorphidEvents.Kill, new MorphidEvent(){other = gameObject});
+					killer.Broadcast(CharacterEvents.Kill, new CharacterEvent(){other = gameObject});
 				}
 			}
 			
-			listener.Broadcast(MorphidEvents.Die, null);
+			listener.Broadcast(CharacterEvents.Die, null);
 		}
 	}
 	
+	protected abstract Dictionary<StatType, int> GetBoosts();
+	
 	public void Reset(System.Object data) {
-		Dictionary<StatType, int> boosts = GetComponent<ItemManager>().Boosts();
+		Dictionary<StatType, int> boosts = GetBoosts();
 		foreach (StatType statType in Enum.GetValues(typeof(StatType))) {
 			stats[statType] = new Stat(){
 				Max = boosts[statType],
 				Current = boosts[statType],
-				SingleTickRegenTimer = 0.6f,
+				SingleTickRegenTimer = REGEN_TIMER,
 				NextRegenTick = Time.time,
 				Regenerates = statType != StatType.Health
 			};
 		}
 	}
 	
-	public void AwardKill(MorphidEvent killed) {
-		foreach (StatType s in Enum.GetValues(typeof(StatType))) {
-			stats[s].Max *= 6;
-			stats[s].Max /= 5;
-			if (stats[s].Max < 0) {
-				stats[s].Max = int.MaxValue;
-			}
-			stats[s].Current = stats[s].Max;
-		}
+	public virtual void AwardKill(CharacterEvent killed) {
 	}
 	
 	public int GetMax(StatType stat) {

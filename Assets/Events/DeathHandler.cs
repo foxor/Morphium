@@ -15,10 +15,10 @@ public class DeathHandler : MonoBehaviour {
 	public void Start() {
 		isPlayer = (GetComponent<HealthBar>() != null);
 		isDead = false;
-		GetComponent<MorphidEventListener>().AddCallback(MorphidEvents.Die, OnDeath);
+		GetComponent<CharacterEventListener>().AddCallback(CharacterEvents.Die, OnDeath);
 	}
 	
-	public void OnDeath(MorphidEvent data) {
+	public void OnDeath(CharacterEvent data) {
 		if (isPlayer) {
 			LevelManager.LoadLevel(Level.Shop);
 		}
@@ -29,6 +29,6 @@ public class DeathHandler : MonoBehaviour {
 	}
 	
 	public void OnDestroy() {
-		GetComponent<MorphidEventListener>().Broadcast(MorphidEvents.Destroy, null);
+		GetComponent<CharacterEventListener>().Broadcast(CharacterEvents.Destroy, null);
 	}
 }

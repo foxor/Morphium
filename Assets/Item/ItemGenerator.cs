@@ -12,7 +12,7 @@ public class ItemGenerator : MonoBehaviour {
 	}
 	
 	public void Start() {
-		GetComponent<MorphidEventListener>().AddCallback(MorphidEvents.Kill, OnKill);
+		GetComponent<CharacterEventListener>().AddCallback(CharacterEvents.Kill, OnKill);
 	}
 	
 	protected Item Generate(int itemValue) {
@@ -39,7 +39,7 @@ public class ItemGenerator : MonoBehaviour {
 		return (int)Random.Range(totalValue * 0.5f, totalValue * 1.1f);
 	}
 	
-	protected void OnKill(MorphidEvent data) {
+	protected void OnKill(CharacterEvent data) {
 		trap.AddItem(Generate(NextValue()), data.other.transform.position);
 	}
 }
