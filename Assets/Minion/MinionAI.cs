@@ -8,6 +8,7 @@ public class MinionAI : AI {
 	protected const float SQUARED_AGGRO_RANGE = 81f;
 	protected const float STRAFE_RADIUS = 7f;
 	protected const float SQUARED_STOP_RANGE = 0.5f;
+	protected const float WAYPOINT_SPACING = 15f;
 	
 	protected class MoveTowards : AI.Goal {
 		public Vector3 Destination {
@@ -46,10 +47,16 @@ public class MinionAI : AI {
 			yield return 0;
 		}
 		goals.Clear();
-		goals.Push(new MoveTowards(){Destination = longTermGoal});
+		float lerpDelta = WAYPOINT_SPACING / (longTermGoal - transform.position).magnitude;
+		for (float lerp = 1f; lerp >= 0f; lerp -= lerpDelta) {
+			goals.Push(new MoveTowards(){Destination = Vector3.Lerp(transform.position, longTermGoal, lerp)});
+		}
 	}
 	
 	protected override void Reevaluate () {
+		if (!goals.Any()) {
+			goals.Push(new MoveTowards(){Destination = longTermGoal});
+		}
 		if (goals.Peek() is Attack) {
 			Target currentTarget = ((Attack)goals.Peek()).Target;
 			if (currentTarget == null || (currentTarget.transform.position - transform.position).sqrMagnitude > SQUARED_AGGRO_RANGE) {
