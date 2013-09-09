@@ -57,5 +57,6 @@ public class MinionSpawner : MonoBehaviour {
 		spawn.transform.position = transform.position + delta;
 		spawn.GetComponent<MinionAI>().LongTermGoal = lane.transform.position;
 		spawn.GetComponent<Target>().Team = target.Team;
+		spawn.renderer.material.color = renderer.material.color;
 	}
 }
