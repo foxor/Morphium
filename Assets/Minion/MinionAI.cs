@@ -72,7 +72,7 @@ public class MinionAI : AI {
 			
 			goals.Push(new Attack(){Target = target});
 			Vector2 strafeDelta = Random.insideUnitCircle.normalized * STRAFE_RADIUS;
-			goals.Push(new Juke(){Destination = new Vector3(strafeDelta.x, transform.position.y, strafeDelta.y)});
+			goals.Push(new Juke(){Destination = transform.position + new Vector3(strafeDelta.x, 0f, strafeDelta.y)});
 		}
 	}
 

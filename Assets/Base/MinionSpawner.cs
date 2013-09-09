@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class MinionSpawner : MonoBehaviour {
 	
 	protected const float INTRASPAWN_INTERVAL = 0.5f;
-	protected const float SPAWN_TIMER = 15f;
+	protected const float SPAWN_TIMER = 8f;
 	protected const int MELEE_PER_WAVE = 3;
 	protected const int RANGED_PER_WAVE = 3;
 	protected const float SPAWN_DISTANCE = 1f;
