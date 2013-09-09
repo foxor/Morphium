@@ -34,7 +34,7 @@ public abstract class DamageDealer : MonoBehaviour {
 	}
 	
 	protected bool Enemy(Collider other) {
-		Target selfTarget = GetComponent<Target>();
+		Target selfTarget = Owner.GetComponent<Target>();
 		Target otherTarget = other.GetComponent<Target>();
 		if (selfTarget == null || otherTarget == null) {
 			return true;
