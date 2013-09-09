@@ -46,7 +46,9 @@ public class MinionSpawner : MonoBehaviour {
 				timer += Time.deltaTime;
 			}
 			foreach (MinionSpawner lane in lanes) {
-				SpawnMinion(MinionPrefab(spawnNum), lane);
+				if (lane != null) {
+					SpawnMinion(MinionPrefab(spawnNum), lane);
+				}
 			}
 		} while (++spawnNum < totalSpawns());
 	}

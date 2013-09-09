@@ -2,6 +2,8 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 
+[RequireComponent(typeof(CharacterEventListener))]
+[RequireComponent(typeof(DeathHandler))]
 public abstract class StatManager : MonoBehaviour {
 	protected const float REGEN_TIMER = 0.6f;
 	
