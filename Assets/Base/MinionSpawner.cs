@@ -10,8 +10,13 @@ public class MinionSpawner : MonoBehaviour {
 	protected const int RANGED_PER_WAVE = 3;
 	protected const float SPAWN_DISTANCE = 1f;
 	
+	protected const int NUM_TURRETS = 3;
+	protected const int INTRA_TURRET_SPACE = 2;
+	protected const int EDGE_SPACE = 1;
+	
 	public GameObject meleeMinionPrefab;
 	public GameObject rangedMinionPrefab;
+	public GameObject turretPrefab;
 	public MinionSpawner[] lanes;
 	
 	protected float nextSpawn;
@@ -29,12 +34,47 @@ public class MinionSpawner : MonoBehaviour {
 		}
 	}
 	
+	public void Start() {
+		SpawnTurrets();
+	}
+	
 	protected int totalSpawns() {
 		return MELEE_PER_WAVE + RANGED_PER_WAVE;
 	}
 	
 	protected GameObject MinionPrefab(int spawnNum) {
 		return spawnNum < MELEE_PER_WAVE ? meleeMinionPrefab : rangedMinionPrefab;
+	}
+	
+	protected void SpawnTurrets() {
+		// Lane diagram:
+		//---BEETIIIITIIIITEEeetiiiitiiiiteeb---
+		// Key:
+		//  - Upper: spawned by me
+		//  - Lower: spawned by lane opponent
+		//  - "-": Empty space outside lane
+		//  - B: this base
+		//  - E: edge space
+		//  - I: intra-turret space
+		//  - T: Turret
+		int totalSpace = (EDGE_SPACE * 2 + INTRA_TURRET_SPACE * (NUM_TURRETS - 1)) * 2;
+		float lerp_min = ((float)EDGE_SPACE) / ((float)totalSpace);
+		float lerp_max = ((float)((totalSpace / 2) - EDGE_SPACE)) / ((float)totalSpace);
+		foreach (MinionSpawner lane in lanes) {
+			for (int i = 0; i < NUM_TURRETS; i++) {
+				Vector3 spawnPos = Vector3.Lerp(transform.position, lane.transform.position,
+					Mathf.Lerp(lerp_min, lerp_max, ((float)i) / ((float)(NUM_TURRETS - 1)))
+				);
+				SpawnTurret(spawnPos);
+			}
+		}
+	}
+	
+	protected void SpawnTurret(Vector3 position) {
+		GameObject spawn = (GameObject)Instantiate(turretPrefab);
+		spawn.transform.position = position;
+		spawn.GetComponent<Target>().Team = target.Team;
+		spawn.renderer.material.color = renderer.material.color;
 	}
 	
 	protected IEnumerator Spawn() {
