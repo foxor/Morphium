@@ -10,7 +10,7 @@ public class Wall : MonoBehaviour {
 	protected static int wallCount = 0;
 	
 	public void Awake() {
-		walls[wallCount++] = collider;
+		walls[wallCount++ % WALLS] = collider;
 	}
 	
 	public static bool isWall(RaycastHit test) {
