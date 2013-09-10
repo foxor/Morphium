@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+[RequireComponent (typeof(TypeProvider))]
 public class DeathHandler : MonoBehaviour {
 	
 	protected bool isPlayer;
@@ -19,13 +20,15 @@ public class DeathHandler : MonoBehaviour {
 	}
 	
 	public void OnDeath(CharacterEvent data) {
-		if (isPlayer) {
-			LevelManager.LoadLevel(Level.Shop);
-		}
-		else {
+		if (!isPlayer) {
 			Destroy(gameObject);
 			isDead = true;
 		}
+		GlobalEventListener.Listener().Broadcast(GetComponent<TypeProvider>().Type, new CharacterStatusEventData(){
+			EventCharacterType = CharacterStatusEventData.CharacterType.Morphid,
+			EventStatus = CharacterStatusEventData.Status.Die,
+			Source = gameObject
+		});
 	}
 	
 	public void OnDestroy() {
