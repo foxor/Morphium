@@ -10,8 +10,6 @@ public abstract class AI : MonoBehaviour {
 	protected const float EVALUATION_TIMER = 0.3f;
 	
 	protected Stack<Goal> goals;
-	protected Move movement;
-	protected Projectile projectile;
 	protected float nextEvaluation;
 	
 	protected abstract void Reevaluate();
@@ -20,8 +18,6 @@ public abstract class AI : MonoBehaviour {
 	
 	public void Awake() {
 		nextEvaluation = 0f;
-		movement = GetComponent<Move>();
-		projectile = GetComponent<Projectile>();
 		goals = new Stack<Goal>();
 	}
 	

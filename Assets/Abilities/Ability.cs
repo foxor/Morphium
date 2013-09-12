@@ -2,7 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 
-public abstract class Ability : MonoBehaviour {
+public abstract class Ability {
 	protected abstract void Cast(Vector3 target);
 	protected abstract int Cost();
 	
@@ -14,6 +14,7 @@ public abstract class Ability : MonoBehaviour {
 	protected float castComplete;
 	protected float nextIdle;
 	protected StatManager statManager;
+	protected GameObject gameObject;
 	
 	public enum CastState {
 		Idle,
@@ -33,8 +34,12 @@ public abstract class Ability : MonoBehaviour {
 		}
 	}
 	
-	public void Awake() {
-		statManager = GetComponent<StatManager>();
+	public Ability (StatManager statManager) : this(statManager, statManager.gameObject) {
+	}
+	
+	public Ability (StatManager statManager, GameObject host) {
+		this.statManager = statManager;
+		this.gameObject = host;
 	}
 	
 	public void TryCast(bool pressedThisFrame, Vector3 target) {
@@ -49,6 +54,20 @@ public abstract class Ability : MonoBehaviour {
 				nextIdle = castComplete + cooldown;
 				Cast(target);
 			}
+		}
+	}
+	
+	public abstract void Update();
+	
+	protected Transform transform {
+		get {
+			return gameObject.transform;
+		}
+	}
+	
+	protected Renderer renderer {
+		get {
+			return gameObject.renderer;
 		}
 	}
 }

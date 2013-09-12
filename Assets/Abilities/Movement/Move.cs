@@ -4,20 +4,33 @@ using System.Collections.Generic;
 
 public class Move : Ability {
 	
-	public float speed;
-	public Ability onArrival;
-	public int cost;
-	public bool continueToRange;
-	public float range;
+	public float Speed {
+		get; set;
+	}
+	public Ability OnArrival {
+		get; set;
+	}
+	public int cost {
+		get; set;
+	}
+	public bool ContinueToRange {
+		get; set;
+	}
+	public float Range {
+		get; set;
+	}
 	
 	private Nullable<Vector3> delta;
+	
+	public Move(StatManager s) : base(s){}
+	public Move(StatManager s, GameObject toMove) : base(s, toMove){}
 	
 	protected override void Cast (Vector3 target) {
 		target.y = transform.position.y;
 		delta = target - transform.position;
 		transform.rotation = Quaternion.LookRotation(delta.Value.normalized);
-		if (continueToRange) {
-			delta = delta.Value.normalized * range;
+		if (ContinueToRange) {
+			delta = delta.Value.normalized * Range;
 		}
 	}
 	
@@ -29,14 +42,14 @@ public class Move : Ability {
 		delta = null;
 	}
 	
-	public void Update () {
+	public override void Update () {
 		if (delta != null) {
-			Vector3 normlizedDelta = delta.Value.normalized * speed * Time.deltaTime;
+			Vector3 normlizedDelta = delta.Value.normalized * Speed * Time.deltaTime;
 			if (delta.Value.sqrMagnitude < normlizedDelta.sqrMagnitude) {
 				transform.position += delta.Value;
 				delta = null;
-				if (onArrival != null) {
-					onArrival.TryCast(true, Vector3.zero);
+				if (OnArrival != null) {
+					OnArrival.TryCast(true, Vector3.zero);
 				}
 			}
 			else {

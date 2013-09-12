@@ -14,8 +14,10 @@ public class TurretAI : AI {
 	}
 	
 	protected Qualifier teamSelector;
+	protected Projectile projectile;
 	
 	public void Start() {
+		projectile = this.GetProvider().GetAbility<Projectile>();
 		teamSelector = TargetManager.IsOpposing(GetComponent<Target>());
 	}
 	

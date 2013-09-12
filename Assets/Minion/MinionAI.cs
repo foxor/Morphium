@@ -37,9 +37,14 @@ public class MinionAI : AI {
 	}
 	
 	protected Qualifier teamSelector;
+	protected Move movement;
+	protected Projectile projectile;
 	
 	public void Start() {
 		teamSelector = TargetManager.IsOpposing(GetComponent<Target>());
+		AbilityProvider provider = this.GetProvider();
+		movement = provider.GetAbility<Move>();
+		projectile = provider.GetAbility<Projectile>();
 	}
 	
 	protected IEnumerator SetupLongTermGoal() {

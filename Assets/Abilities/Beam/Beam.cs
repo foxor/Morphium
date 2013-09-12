@@ -12,6 +12,8 @@ public class Beam : Ability {
 	protected GameObject beam;
 	protected float costRemainder;
 	
+	public Beam(StatManager s) : base(s){}
+	
 	protected override int Cost () {
 		float frameCost = Time.deltaTime * costPerSecond + costRemainder;
 		costRemainder = frameCost % 1;
@@ -20,19 +22,19 @@ public class Beam : Ability {
 	
 	protected override void Cast (Vector3 target) {
 		if (beam == null) {
-			beam = (GameObject)Instantiate(prefab);
-			beam.GetDamageDealer().Owner = gameObject;
+			beam = (GameObject)Object.Instantiate(prefab);
+			beam.GetDamageDealer().Owner = statManager.gameObject;
 		}
 		castThisFrame = true;
-		target.y = transform.position.y;
-		Vector3 delta = target - transform.position;
-		beam.transform.position = transform.position + delta.normalized * HALF_BEAM_LENGTH;
+		target.y = statManager.transform.position.y;
+		Vector3 delta = target - statManager.transform.position;
+		beam.transform.position = statManager.transform.position + delta.normalized * HALF_BEAM_LENGTH;
 		beam.transform.rotation = Quaternion.LookRotation(delta);
 	}
 	
-	public void Update() {
+	public override void Update() {
 		if (!castThisFrame && beam != null) {
-			Destroy(beam);
+			Object.Destroy(beam);
 		}
 		castThisFrame = false;
 	}

@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 [RequireComponent(typeof(CharacterEventListener))]
 [RequireComponent(typeof(DeathHandler))]
@@ -88,5 +89,19 @@ public abstract class StatManager : MonoBehaviour {
 				s.NextRegenTick += s.SingleTickRegenTimer;
 			}
 		}
+	}
+}
+
+public static class StatHelpers {
+	private static List<Type> ProviderTypes = AppDomain.CurrentDomain.GetAssemblies()
+		.SelectMany(assembly => assembly.GetTypes())
+		.Where(type => type.IsSubclassOf(typeof(StatManager))).ToList();
+	public static StatManager GetStatManager(this GameObject go) {
+		return ProviderTypes
+			.Select(type => (StatManager)go.GetComponent(type))
+			.Where(x => x != null).Single();
+	}
+	public static StatManager GetStatManager(this MonoBehaviour go) {
+		return ProviderTypes.Select(type => (StatManager)go.GetComponent(type)).Where(x => x != null).Single();
 	}
 }
