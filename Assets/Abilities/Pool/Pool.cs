@@ -2,8 +2,8 @@ using UnityEngine;
 using System.Collections;
 
 public class Pool : Ability {
-	
-	public GameObject prefab;
+	protected const string RESOURCE_NAME = "Pool";
+	protected static GameObject prefab = (GameObject)Resources.Load(RESOURCE_NAME);
 	
 	public Damage damage = new Damage(){Magnitude = 3, Type = Element.Physical};
 	public int cost;

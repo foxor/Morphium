@@ -4,8 +4,9 @@ using System.Collections;
 public class Beam : Ability {
 	
 	protected const int HALF_BEAM_LENGTH = 15;
+	protected const string RESOURCE_NAME = "Beam";
+	protected static GameObject prefab = (GameObject)Resources.Load(RESOURCE_NAME);
 	
-	public GameObject prefab;
 	public int costPerSecond;
 	
 	protected bool castThisFrame;
