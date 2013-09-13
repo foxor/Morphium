@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class MinionStatsManager : StatManager {
 	
-	protected const int MINION_STAT_LEVEL = 40;
+	protected const int MINION_STAT_LEVEL = 10;
 	
 	protected override Dictionary<StatType, int> GetBoosts() {
 		return new Dictionary<StatType, int>(){
