@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 
 public class ItemManager : MonoBehaviour {
+	protected const int MORPHID_STARTING_ITEM_STATS = 2;
+	
 	protected Dictionary<Slot, Item> items;
 	
 	public Ability omniGrant;
@@ -12,11 +14,11 @@ public class ItemManager : MonoBehaviour {
 		items = new Dictionary<Slot, Item>();
 		foreach (Slot slot in Enum.GetValues(typeof(Slot))) {
 			items[slot] = new Item(){
-				StatBoost = 2,
-				OffStatBoost = 2,
-				HealthBoost = 2,
-				MorphiumBoost = 2,
-				OffStatType = StatType.Sensors,
+				StatBoost = MORPHID_STARTING_ITEM_STATS,
+				OffStatBoost = MORPHID_STARTING_ITEM_STATS,
+				HealthBoost = MORPHID_STARTING_ITEM_STATS,
+				MorphiumBoost = MORPHID_STARTING_ITEM_STATS,
+				OffStatType = StatType.Attack,
 				GrantedAbility = omniGrant,
 				Icon = omniIcon,
 				FilledSlot = slot
