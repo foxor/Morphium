@@ -9,7 +9,7 @@ public class Beam : Ability {
 	
 	protected const float DEFAULT_DPS_RATIO = 1f;
 	protected const Slot DEFAULT_SLOT = Slot.Chest;
-	protected const Element DEFAULT_ELEMENT = Element.Physical;
+	protected const Element DEFAULT_ELEMENT = Element.Plasma;
 	protected const float DEFAULT_COST_PER_DAMAGE_PER_SECOND = 1.5f;
 	
 	protected float costPerDamagePerSecond;
