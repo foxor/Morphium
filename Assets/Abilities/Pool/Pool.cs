@@ -14,7 +14,8 @@ public class Pool : Ability {
 	protected override void Cast (Vector3 t) {
 		GameObject pool = (GameObject)Object.Instantiate(prefab);
 		pool.transform.position = transform.position;
-		pool.GetComponent<DamageDuringContact>().damagePerSecond = damage;
+		//FIXME
+		//pool.GetComponent<DamageDuringContact>().damagePerSecond = damage;
 		pool.GetDamageDealer().Owner = gameObject;
 		pool.GetComponent<Duration>().Lifetime = duration;
 	}

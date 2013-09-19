@@ -4,16 +4,30 @@ using System.Linq;
 
 public class DamageDuringContact : DamageDealer {
 	
-	public Damage damagePerSecond = new Damage(){ Magnitude = 400, Type = Element.Physical};
+	protected const float MINIMUM_TICK_TIME = 0.1f;
+	
+	protected Damage damagePerSecond;
+	public Damage DamagePerSecond {
+		get {
+			return damagePerSecond;
+		}
+		set {
+			damagePerSecond = value;
+			damageTickInterval = 1f / ((float)damagePerSecond.Magnitude);
+			singleTickDamage = new Damage() {Magnitude = 1, Type = damagePerSecond.Type};
+			while (damageTickInterval < MINIMUM_TICK_TIME) {
+				damageTickInterval *= 2f;
+				singleTickDamage.Magnitude *= 2;
+			}
+		}
+	}
 	
 	protected float damageTickInterval;
 	protected Damage singleTickDamage;
 	protected Dictionary<StatManager, float> nextDamageTime;
 	
 	public void Awake() {
-		damageTickInterval = 1f / ((float)damagePerSecond.Magnitude);
 		nextDamageTime = new Dictionary<StatManager, float>();
-		singleTickDamage = new Damage() {Magnitude = 1, Type = damagePerSecond.Type};
 	}
 	
 	protected override void Enter(GameObject other) {
