@@ -19,7 +19,7 @@ public class Pool : Ability {
 	
 	public Pool(StatManager s) : this(s, DEFAULT_COST_PER_DAMAGE_PER_SECOND, DEFAULT_DPS_RATIO, DEFAULT_SLOT, DEFAULT_ELEMENT){}
 	public Pool(StatManager s, float costPerDamagePerSecondRatio, float damagePerSecondRatio, Slot slot, Element element) : base(s){
-		this.costPerDamagePerSecond = costPerDamagePerSecond;
+		this.costPerDamagePerSecond = costPerDamagePerSecondRatio;
 		this.damagePerSecondRatio = damagePerSecondRatio;
 		this.slot = slot;
 		this.element = element;
