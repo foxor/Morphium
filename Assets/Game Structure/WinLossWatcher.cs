@@ -5,7 +5,7 @@ using System.Linq;
 
 public class WinLossWatcher : MonoBehaviour {
 	protected const int PLAYER_TEAM = 0;
-	protected const int NUM_TEAMS = 4;
+	protected const int NUM_TEAMS = 2;
 	
 	protected bool[] losingTeams;
 	
