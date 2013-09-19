@@ -6,7 +6,7 @@ using System.Linq;
 [RequireComponent(typeof(CharacterEventListener))]
 [RequireComponent(typeof(DeathHandler))]
 public abstract class StatManager : MonoBehaviour {
-	protected const float REGEN_TIMER = 0.6f;
+	protected const float REGEN_TIMER = 8f;
 	
 	protected Dictionary<StatType, Stat> stats;
 	protected CharacterEventListener listener;
@@ -64,7 +64,7 @@ public abstract class StatManager : MonoBehaviour {
 			stats[statType] = new Stat(){
 				Max = boosts[statType],
 				Current = boosts[statType],
-				SingleTickRegenTimer = REGEN_TIMER,
+				SingleTickRegenTimer = REGEN_TIMER / ((float)boosts[statType]),
 				NextRegenTick = Time.time,
 				Regenerates = statType != StatType.Health
 			};
