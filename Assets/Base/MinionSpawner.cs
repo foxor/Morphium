@@ -75,7 +75,7 @@ public class MinionSpawner : MonoBehaviour {
 		GameObject spawn = (GameObject)Instantiate(turretPrefab);
 		spawn.transform.position = position;
 		spawn.GetComponent<Target>().Team = target.Team;
-		spawn.renderer.material.color = renderer.material.color;
+		spawn.GetComponentInChildren<Renderer>().material.color = renderer.material.color;
 	}
 	
 	protected IEnumerator Spawn() {
