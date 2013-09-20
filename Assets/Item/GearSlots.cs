@@ -1,4 +1,6 @@
 using UnityEngine;
+using System;
+
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,6 +8,8 @@ public class GearSlots : MonoBehaviour {
 	
 	protected const int GEAR_NUM = 5;
 	protected const int ENTRY_SIZE = 60;
+	protected const int LABEL_HEIGHT = 25;
+	protected const int LABEL_WIDTH = 50;
 	
 	public Texture omniTexture;
 	
@@ -15,6 +19,8 @@ public class GearSlots : MonoBehaviour {
 	
 	protected Rect[] destinations;
 	protected TrapEntry[] entries;
+	protected Rect[] labelLocations;
+	protected string[] labelTexts;
 	
 	protected TrapEntry held;
 	protected TrapEntry Held {
@@ -58,6 +64,20 @@ public class GearSlots : MonoBehaviour {
 			new Rect(Screen.width / 3f - ENTRY_SIZE / 2f, 2f * Screen.height / 3f - ENTRY_SIZE / 2f, ENTRY_SIZE, ENTRY_SIZE),
 			new Rect(2f * Screen.width / 3f - ENTRY_SIZE / 2f, 2f * Screen.height / 3f - ENTRY_SIZE / 2f, ENTRY_SIZE, ENTRY_SIZE),
 		};
+		labelLocations = new Rect[] {
+			new Rect(destinations[0].center.x - LABEL_WIDTH / 2f, destinations[0].yMax, LABEL_WIDTH, LABEL_HEIGHT),
+			new Rect(destinations[1].center.x - LABEL_WIDTH / 2f, destinations[1].yMax, LABEL_WIDTH, LABEL_HEIGHT),
+			new Rect(destinations[2].center.x - LABEL_WIDTH / 2f, destinations[2].yMax, LABEL_WIDTH, LABEL_HEIGHT),
+			new Rect(destinations[3].center.x - LABEL_WIDTH / 2f, destinations[3].yMax, LABEL_WIDTH, LABEL_HEIGHT),
+			new Rect(destinations[4].center.x - LABEL_WIDTH / 2f, destinations[4].yMax, LABEL_WIDTH, LABEL_HEIGHT)
+		};
+		labelTexts = new string[] {
+			Enum.GetName(typeof(Slot), Slot.Head),
+			Enum.GetName(typeof(Slot), Slot.Arm),
+			Enum.GetName(typeof(Slot), Slot.Engine),
+			Enum.GetName(typeof(Slot), Slot.Chest),
+			Enum.GetName(typeof(Slot), Slot.Leg)
+		};
 		ItemManager items = GetComponent<ItemManager>();
 		entries = new TrapEntry[] {
 			new TrapEntry() {OccupiedRect = destinations[0], TrappedItem = items.GetSlotEquipped(Slot.Head)},
@@ -97,6 +117,7 @@ public class GearSlots : MonoBehaviour {
 		GUI.depth = 1;
 		for (int i = 0; i < GEAR_NUM; i++) {
 			GUI.DrawTexture(entries[i].OccupiedRect, omniTexture);
+			GUI.Label(labelLocations[i], labelTexts[i]);
 		}
 		if (Held != null) {
 			GUI.DrawTexture(Held.OccupiedRect, omniTexture);
