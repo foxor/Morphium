@@ -5,6 +5,8 @@ public class ColorChanger : MonoBehaviour {
 	public Color color;
 	
 	public void Awake() {
-		renderer.material.color = color;
+		foreach (Renderer r in GetComponentsInChildren<Renderer>()) {
+			r.material.color = color;
+		}
 	}
 }

@@ -22,10 +22,12 @@ public class MinionSpawner : MonoBehaviour {
 	
 	protected float nextSpawn;
 	protected Target target;
+	protected Color color;
 	
 	public void Awake() {
 		nextSpawn = Time.time + SPAWN_TIMER;
 		target = GetComponent<Target>();
+		color = GetComponent<ColorChanger>().color;
 	}
 	
 	public void Update() {
@@ -76,7 +78,7 @@ public class MinionSpawner : MonoBehaviour {
 		GameObject spawn = (GameObject)Instantiate(turretPrefab);
 		spawn.transform.position = position;
 		spawn.GetComponent<Target>().Team = target.Team;
-		spawn.GetComponentInChildren<Renderer>().material.color = renderer.material.color;
+		spawn.GetComponentInChildren<Renderer>().material.color = color;
 	}
 	
 	protected IEnumerator Spawn() {
@@ -102,7 +104,7 @@ public class MinionSpawner : MonoBehaviour {
 		spawn.GetComponent<MinionAI>().LongTermGoal = lane.transform.position;
 		spawn.GetComponent<Target>().Team = target.Team;
 		foreach (Renderer r in spawn.GetComponentsInChildren<Renderer>()) {
-			r.material.color = renderer.material.color;
+			r.material.color = color;
 		}
 	}
 }
