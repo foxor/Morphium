@@ -66,6 +66,7 @@ public class MinionSpawner : MonoBehaviour {
 				Vector3 spawnPos = Vector3.Lerp(transform.position, lane.transform.position,
 					Mathf.Lerp(lerp_min, lerp_max, ((float)i) / ((float)(NUM_TURRETS - 1)))
 				);
+				spawnPos.y = 0f;
 				SpawnTurret(spawnPos);
 			}
 		}
