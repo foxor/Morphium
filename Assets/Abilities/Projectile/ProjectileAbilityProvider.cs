@@ -8,6 +8,6 @@ public class ProjectileAbilityProvider : AbilityProvider {
 		GameObject owner = dd.Owner;
 		StatManager s = owner.GetStatManager();
 		DoA doa = new DoA(s, gameObject);
-		yield return new Move(s, gameObject){Speed = 30, Range = 30, ContinueToRange = true, OnArrival = doa};
+		yield return new Move(s, gameObject){SpeedFactor = 30f / Mathf.Log(10f), Range = 30, ContinueToRange = true, OnArrival = doa};
 	}
 }

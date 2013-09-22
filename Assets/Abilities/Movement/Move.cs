@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class Move : Ability {
 	
-	public float Speed {
+	public float SpeedFactor {
 		get; set;
 	}
 	public Ability OnArrival {
@@ -40,6 +40,12 @@ public class Move : Ability {
 	
 	public void Stop () {
 		delta = null;
+	}
+	
+	protected float Speed {
+		get {
+			return SpeedFactor * Mathf.Log(statManager.GetCurrent(StatType.Speed));
+		}
 	}
 	
 	public override void Update () {

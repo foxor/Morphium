@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 
 public class ItemManager : MonoBehaviour {
-	protected const int MORPHID_STARTING_ITEM_STATS = 2;
+	protected const int MORPHID_STARTING_ITEM_STATS = 10;
 	
 	protected Dictionary<Slot, Item> items;
 	
