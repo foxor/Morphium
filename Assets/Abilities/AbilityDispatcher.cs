@@ -9,6 +9,14 @@ public class AbilityDispatcher : MonoBehaviour {
 		Provider = this.GetProvider();
 	}
 	
+	public void Start() {
+		GetComponent<CharacterEventListener>().AddCallback(CharacterEvents.Equip, ResetAbilityProvider);
+	}
+	
+	public void ResetAbilityProvider(CharacterEvent data) {
+		Provider.Reset();
+	}
+	
 	public void Update() {
 		Nullable<RaycastHit> raycast = ClickRaycast.GetLastHit();
 		if (raycast == null || Wall.isWall(raycast.Value)) {
@@ -26,11 +34,11 @@ public class AbilityDispatcher : MonoBehaviour {
 		if (Input.GetKey(KeyCode.R)) {
 			Provider.Abilities[3].TryCast(Input.GetKeyDown(KeyCode.R), raycast.Value.point);
 		}
-		if (Input.GetMouseButton(0)) {
-			Provider.Abilities[4].TryCast(Input.GetMouseButtonDown(0), raycast.Value.point);
-		}
 		if (Input.GetMouseButton(1)) {
-			Provider.Abilities[5].TryCast(Input.GetMouseButtonDown(1), raycast.Value.point);
+			Provider.Abilities[4].TryCast(Input.GetMouseButtonDown(1), raycast.Value.point);
+		}
+		if (Input.GetMouseButton(0)) {
+			Provider.Abilities[5].TryCast(Input.GetMouseButtonDown(0), raycast.Value.point);
 		}
 	}
 }

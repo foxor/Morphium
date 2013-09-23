@@ -22,6 +22,10 @@ public abstract class AbilityProvider : MonoBehaviour {
 		}
 	}
 	
+	public void Reset() {
+		abilities = abilitySource().ToList();
+	}
+	
 	public T GetAbility<T>() where T : Ability {
 		return (T)Abilities.Where(ability => typeof(T).IsAssignableFrom(ability.GetType())).Single();
 	}

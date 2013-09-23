@@ -7,10 +7,12 @@ public class ItemManager : MonoBehaviour {
 	
 	protected Dictionary<Slot, Item> items;
 	
-	public Ability omniGrant;
+	protected Ability omniGrant;
 	public Texture omniIcon;
 	
 	public void Awake() {
+		StatManager s = GetComponent<StatManager>();
+		omniGrant = new Projectile(s){castTime = 0.2f, cooldown = 1f};
 		items = new Dictionary<Slot, Item>();
 		foreach (Slot slot in Enum.GetValues(typeof(Slot))) {
 			items[slot] = new Item(){
@@ -32,6 +34,12 @@ public class ItemManager : MonoBehaviour {
 	
 	public Item GetSlotEquipped(Slot slot) {
 		return items[slot];
+	}
+	
+	public IEnumerable<Ability> Abilities() {
+		foreach (Slot slot in Enum.GetValues(typeof(Slot))) {
+			yield return items[slot].GrantedAbility;
+		}
 	}
 	
 	public Dictionary<StatType, int> Boosts() {

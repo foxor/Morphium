@@ -15,19 +15,38 @@ public class ItemGenerator : MonoBehaviour {
 		GetComponent<CharacterEventListener>().AddCallback(CharacterEvents.Kill, OnKill);
 	}
 	
+	protected Ability GenerateAbility(Slot slot) {
+		StatManager s = GetComponent<StatManager>();
+		switch (slot) {
+		case Slot.Arm:
+			return new Projectile(s){castTime = 0.2f, cooldown = 1f};
+		case Slot.Chest:
+			return new Beam(s);
+		case Slot.Engine:
+			return new Pool(s){duration = 2f, cooldown = 3f};
+		case Slot.Leg:
+			return new Move(s){SpeedFactor = 11f, cooldown = 2f, cost = 9};
+		case Slot.Head:
+			return new Projectile(s){castTime = 0.2f, cooldown = 1f};
+		}
+		throw new UnityException("Unknown item slot has no ability types");
+	}
+	
 	protected Item Generate(int itemValue) {
 		float totalWeight = 0f, mainStat, offStat, health, morphium;
 		totalWeight += (mainStat = Random.Range(0f, 1f));
 		totalWeight += (offStat = Random.Range(0f, 1f));
 		totalWeight += (health = Random.Range(0f, 1f));
 		totalWeight += (morphium = Random.Range(0f, 1f));
+		Slot slot = System.Enum.GetValues(typeof(Slot)).Pick<Slot>();
 		return new Item() {
-			FilledSlot = System.Enum.GetValues(typeof(Slot)).Pick<Slot>(),
+			FilledSlot = slot,
 			StatBoost = (int)((((float)itemValue) * mainStat) / totalWeight),
 			OffStatBoost = (int)((((float)itemValue) * offStat) / totalWeight),
 			HealthBoost = (int)((((float)itemValue) * health) / totalWeight),
 			MorphiumBoost = (int)((((float)itemValue) * morphium) / totalWeight),
-			OffStatType = System.Enum.GetValues(typeof(StatType)).Pick<StatType>()
+			OffStatType = System.Enum.GetValues(typeof(StatType)).Pick<StatType>(),
+			GrantedAbility = GenerateAbility(slot)
 		};
 	}
 	
