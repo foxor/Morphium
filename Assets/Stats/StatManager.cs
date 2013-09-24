@@ -99,6 +99,7 @@ public abstract class StatManager : MonoBehaviour {
 			stats[statType] = new Stat(){
 				Max = boosts[statType],
 				Current = boosts[statType],
+				AllocatedRegen = boosts[statType],
 				SingleTickRegenTimer = REGEN_TIMER / ((float)boosts[statType]),
 				NextRegenTick = Time.time
 			};
