@@ -5,14 +5,24 @@ using System.Linq;
 
 public class WinLossWatcher : MonoBehaviour {
 	protected const int PLAYER_TEAM = 0;
-	protected const int NUM_TEAMS = 2;
 	
-	protected bool[] losingTeams;
+	protected static WinLossWatcher singleton;
+	
+	protected Dictionary<int, bool> losingTeams;
+	
+	public void Awake() {
+		losingTeams = new Dictionary<int, bool>();
+		singleton = this;
+	}
 	
 	public void Start() {
 		GlobalEventListener.Listener().AddCallback(CharacterType.Base, OnStatusChange);
 		GlobalEventListener.Listener().AddCallback(CharacterType.Morphid, OnStatusChange);
 		GlobalEventListener.Listener().AddCallback(Level.Adventure, OnLevelLoad);
+	}
+	
+	public static void AddTeam(int team) {
+		singleton.losingTeams[team] = false;
 	}
 	
 	public void OnStatusChange(CharacterStatusEventData data) {
@@ -22,7 +32,7 @@ public class WinLossWatcher : MonoBehaviour {
 			if (justLost == PLAYER_TEAM) {
 				LevelManager.LoadLevel(Level.Shop);
 			}
-			if (losingTeams.Count(x => !x) == 1) {
+			if (losingTeams.Values.Count(x => !x) == 1) {
 				LevelManager.LoadLevel(Level.Shop);
 			}
 		}
@@ -30,7 +40,9 @@ public class WinLossWatcher : MonoBehaviour {
 	
 	public void OnLevelLoad(LevelChangeEventData data) {
 		if (data.Action == LoadState.Loaded) {
-			losingTeams = new bool[NUM_TEAMS];
+			foreach (int team in losingTeams.Keys.ToArray()) {
+				losingTeams[team] = false;
+			}
 		}
 	}
 }
