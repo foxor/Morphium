@@ -11,11 +11,16 @@ public abstract class StatManager : MonoBehaviour {
 	protected Dictionary<StatType, Stat> stats;
 	protected CharacterEventListener listener;
 	protected DeathHandler deathHandler;
+	protected Target target;
+	
+	protected Queue<StatType> awaitingRegen;
 	
 	public void Awake() {
 		listener = GetComponent<CharacterEventListener>();
 		deathHandler = GetComponent<DeathHandler>();
+		target = GetComponent<Target>();
 		stats = new Dictionary<StatType, Stat>();
+		awaitingRegen = new Queue<StatType>();
 	}
 	
 	public void Start() {
@@ -24,10 +29,28 @@ public abstract class StatManager : MonoBehaviour {
 		listener.AddCallback(CharacterEvents.Equip, Reset);
 		listener.AddCallback(CharacterEvents.Destroy, UnregisterGlobal);
 		GlobalEventListener.Listener().AddCallback(Level.Shop, Reset);
+		GermaniumTracker.Singleton().AddCallback(GermaniumEvent.MorphiumSpend, AllocateRegen);
 	}
 	
 	protected void UnregisterGlobal(System.Object data) {
 		GlobalEventListener.Listener().RemoveCallback(Level.Shop, Reset);
+	}
+	
+	protected void AllocateRegen(GermaniumLevel data) {
+		if (data.Team == target.Team) {
+			while (data.Level > 0 && awaitingRegen.Any()) {
+				Stat toRegen = stats[awaitingRegen.Peek()];
+				if (data.Level >= toRegen.Max - toRegen.AllocatedRegen) {
+					data.Level -= toRegen.Max - toRegen.AllocatedRegen;
+					toRegen.AllocatedRegen = toRegen.Max;
+					awaitingRegen.Dequeue();
+				}
+				else {
+					toRegen.AllocatedRegen += data.Level;
+					data.Level = 0;
+				}
+			}
+		}
 	}
 	
 	public void DealDamage(Damage damage, bool stopRegen, DamageDealer damageDealer) {
@@ -44,6 +67,8 @@ public abstract class StatManager : MonoBehaviour {
 		}
 		
 		damaged.Current -= damage.Magnitude;
+		damaged.AllocatedRegen -= damage.Magnitude;
+		
 		if (damaged.Current <= 0) {
 			if (damageDealer != null && damageDealer.Owner != null) {
 				CharacterEventListener killer = damageDealer.Owner.GetComponent<CharacterEventListener>();
@@ -53,6 +78,16 @@ public abstract class StatManager : MonoBehaviour {
 			}
 			
 			listener.Broadcast(CharacterEvents.Die, null);
+		}
+		else {
+			if (GermaniumTracker.Singleton()[target.Team] > damaged.Max - damaged.AllocatedRegen) {
+				GermaniumTracker.Singleton()[target.Team] -= damaged.Max - damaged.AllocatedRegen;
+				damaged.AllocatedRegen = damaged.Max;
+			}
+			else {
+				damaged.AllocatedRegen += GermaniumTracker.Singleton()[target.Team];
+				GermaniumTracker.Singleton()[target.Team] = 0;
+			}
 		}
 	}
 	
@@ -65,13 +100,13 @@ public abstract class StatManager : MonoBehaviour {
 				Max = boosts[statType],
 				Current = boosts[statType],
 				SingleTickRegenTimer = REGEN_TIMER / ((float)boosts[statType]),
-				NextRegenTick = Time.time,
-				Regenerates = statType != StatType.Health
+				NextRegenTick = Time.time
 			};
 		}
 	}
 	
 	public virtual void AwardKill(CharacterEvent killed) {
+		GermaniumTracker.Singleton()[target.Team] += 10;
 	}
 	
 	public int GetMax(StatType stat) {
@@ -84,7 +119,7 @@ public abstract class StatManager : MonoBehaviour {
 	
 	public void Update() {
 		foreach (Stat s in stats.Values) {
-			while (s.Current < s.Max && s.Regenerates && s.NextRegenTick < Time.time) {
+			while (s.Current < s.AllocatedRegen && s.NextRegenTick < Time.time) {
 				s.Current ++;
 				s.NextRegenTick += s.SingleTickRegenTimer;
 			}

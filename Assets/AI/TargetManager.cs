@@ -18,6 +18,7 @@ public class TargetManager : MonoBehaviour {
 	
 	public static void AddTarget(Target target) {
 		singleton.targets.Add(target);
+		GermaniumTracker.SetupTeam(target.Team);
 	}
 	
 	public static void RemoveTarget(Target target) {

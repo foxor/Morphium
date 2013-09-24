@@ -22,7 +22,7 @@ public class Stat {
 		get; set;
 	}
 	
-	public bool Regenerates {
+	public int AllocatedRegen {
 		get; set;
 	}
 }
