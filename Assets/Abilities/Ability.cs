@@ -42,7 +42,7 @@ public abstract class Ability {
 		this.gameObject = host;
 	}
 	
-	public void TryCast(bool pressedThisFrame, Vector3 target) {
+	public bool TryCast(bool pressedThisFrame, Vector3 target) {
 		if (castState == CastState.Idle && 
 				(pressedThisFrame || !requiresPress)) {
 			int cost = Cost();
@@ -53,8 +53,10 @@ public abstract class Ability {
 				castComplete = Time.time + castTime;
 				nextIdle = castComplete + cooldown;
 				Cast(target);
+				return true;
 			}
 		}
+		return false;
 	}
 	
 	public abstract void Update();

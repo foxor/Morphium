@@ -45,6 +45,7 @@ public class MinionAI : AI {
 		AbilityProvider provider = this.GetProvider();
 		movement = provider.GetAbility<Move>();
 		projectile = provider.GetAbility<Projectile>();
+		longTermGoal = transform.position;
 	}
 	
 	protected IEnumerator SetupLongTermGoal() {

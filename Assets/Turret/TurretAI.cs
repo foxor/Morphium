@@ -24,10 +24,10 @@ public class TurretAI : AI {
 	protected Projectile projectile;
 	protected Spawn spawn;
 	
-	protected int activeMinions;
+	protected List<GameObject> activeMinions;
 	
 	public void Start() {
-		activeMinions = 0;
+		activeMinions = new List<GameObject>();
 		projectile = this.GetProvider().GetAbility<Projectile>();
 		spawn = this.GetProvider().GetAbility<Spawn>();
 		teamSelector = TargetManager.IsOpposing(GetComponent<Target>());
@@ -35,7 +35,7 @@ public class TurretAI : AI {
 	}
 	
 	protected override void Reevaluate () {
-		if (goals.Peek().GetType() = typeof(Attack) &&
+		if (goals.Peek().GetType() == typeof(Attack) &&
 			(((Attack)goals.Peek()).Target.transform.position - transform.position)
 			.sqrMagnitude > SQUARED_AGGRO_RANGE)
 		{
@@ -65,7 +65,10 @@ public class TurretAI : AI {
 			projectile.TryCast(true, ((Attack)goal).Target.transform.position);
 		}
 		if (goal.GetType() == typeof(Push)) {
-			
+			activeMinions.RemoveAll(x => x == null);
+			if (activeMinions.Count < MINION_COUNT && spawn.TryCast(true, Vector3.zero)) {
+				activeMinions.Add(spawn.LastSpawn);
+			}
 		}
 		return true;
 	}

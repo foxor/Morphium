@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class Spawn : Ability {
 	
-	protected const float SPAWN_DISTANCE = 1f;
+	protected const float SPAWN_DISTANCE = 10f;
 	
 	protected const string RESOURCE_NAME = "Minion";
 	protected static GameObject minionPrefab = (GameObject)Resources.Load(RESOURCE_NAME);
@@ -12,11 +12,19 @@ public class Spawn : Ability {
 	protected Target target;
 	public Target enemy;
 	protected Color color;
+	protected GameObject spawn;
 	
-	public Spawn(StatManager s) : base(s) {}
+	public GameObject LastSpawn {
+		get {
+			return spawn;
+		}
+	}
+	
+	public Spawn(StatManager s) : base(s) {
+		target = statManager.GetComponent<Target>();
+	}
 	
 	public void Enable(int Team, Target enemy, Color color) {
-		target = statManager.GetComponent<Target>();
 		target.Team = Team;
 		this.enemy = enemy;
 		this.color = color;
@@ -28,10 +36,18 @@ public class Spawn : Ability {
 	}
 	
 	protected override void Cast(Vector3 direction) {
-		GameObject spawn = (GameObject)GameObject.Instantiate(minionPrefab);
-		Vector3 delta = (enemy.transform.position - transform.position).normalized * SPAWN_DISTANCE;
+		spawn = (GameObject)GameObject.Instantiate(minionPrefab);
+		Vector3 delta;
+		if (enemy == null) {
+			delta = Random.insideUnitSphere.normalized * SPAWN_DISTANCE;
+			delta.y = 0;
+			//spawn.GetComponent<MinionAI>().LongTermGoal = delta + transform.position;
+		}
+		else {
+			delta = (enemy.transform.position - transform.position).normalized * SPAWN_DISTANCE;
+			spawn.GetComponent<MinionAI>().LongTermGoal = enemy.transform.position;
+		}
 		spawn.transform.position = transform.position + delta;
-		spawn.GetComponent<MinionAI>().LongTermGoal = enemy.transform.position;
 		spawn.GetComponent<Target>().Team = target.Team;
 		foreach (Renderer r in spawn.GetComponentsInChildren<Renderer>()) {
 			r.material.color = color;
