@@ -4,8 +4,6 @@ using System.Collections.Generic;
 
 public class Spawn : Ability {
 	
-	protected const float SPAWN_DISTANCE = 10f;
-	
 	protected const string RESOURCE_NAME = "Minion";
 	protected static GameObject minionPrefab = (GameObject)Resources.Load(RESOURCE_NAME);
 	
@@ -39,9 +37,7 @@ public class Spawn : Ability {
 		spawn = (GameObject)GameObject.Instantiate(minionPrefab);
 		Vector3 delta;
 		if (enemy == null) {
-			delta = Random.insideUnitSphere.normalized * SPAWN_DISTANCE;
-			delta.y = 0;
-			//spawn.GetComponent<MinionAI>().LongTermGoal = delta + transform.position;
+			delta = Vector3.zero;
 		}
 		else {
 			delta = (enemy.transform.position - transform.position).normalized * SPAWN_DISTANCE;

@@ -28,8 +28,8 @@ public class MinionAI : AI {
 		}
 	}
 	
-	protected Vector3 longTermGoal;
-	public Vector3 LongTermGoal {
+	protected Target longTermGoal;
+	public Target LongTermGoal {
 		set {
 			longTermGoal = value;
 			StartCoroutine(SetupLongTermGoal());
@@ -37,11 +37,13 @@ public class MinionAI : AI {
 	}
 	
 	protected Qualifier teamSelector;
+	protected Target target;
 	protected Move movement;
 	protected Projectile projectile;
 	
 	public void Start() {
-		teamSelector = TargetManager.IsOpposing(GetComponent<Target>());
+		target = GetComponent<Target>();
+		teamSelector = TargetManager.IsOpposing(target);
 		AbilityProvider provider = this.GetProvider();
 		movement = provider.GetAbility<Move>();
 		projectile = provider.GetAbility<Projectile>();
@@ -53,9 +55,11 @@ public class MinionAI : AI {
 			yield return 0;
 		}
 		goals.Clear();
-		float lerpDelta = WAYPOINT_SPACING / (longTermGoal - transform.position).magnitude;
-		for (float lerp = 1f; lerp >= 0f; lerp -= lerpDelta) {
-			goals.Push(new MoveTowards(){Destination = Vector3.Lerp(transform.position, longTermGoal, lerp)});
+		if (longTermGoal.Team == target.Team) {
+			float lerpDelta = WAYPOINT_SPACING / (longTermGoal - transform.position).magnitude;
+			for (float lerp = 1f; lerp >= 0f; lerp -= lerpDelta) {
+				goals.Push(new MoveTowards(){Destination = Vector3.Lerp(transform.position, longTermGoal, lerp)});
+			}
 		}
 	}
 	
