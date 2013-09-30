@@ -7,6 +7,7 @@ public class MinionAI : AI {
 	
 	protected const float SQUARED_AGGRO_RANGE = 81f;
 	protected const float STRAFE_RADIUS = 7f;
+	protected const float STRAFE_RADIUS_SQUARED = STRAFE_RADIUS * STRAFE_RADIUS;
 	protected const float SQUARED_STOP_RANGE = 0.5f;
 	protected const float WAYPOINT_SPACING = 15f;
 	
@@ -87,7 +88,7 @@ public class MinionAI : AI {
 				goals.Push(new Attack(){Target = target});
 			}
 			
-			if (target != null || (((MoveTowards)goals.Peek()).Destination - transform.position).magnitude < STRAFE_RADIUS) {
+			if (target != null || (((MoveTowards)goals.Peek()).Destination - transform.position).sqrMagnitude < STRAFE_RADIUS_SQUARED) {
 				Vector2 strafeDelta = Random.insideUnitCircle.normalized * STRAFE_RADIUS;
 				goals.Push(new Juke(){Destination = transform.position + new Vector3(strafeDelta.x, 0f, strafeDelta.y)});
 			}
