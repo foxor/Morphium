@@ -83,13 +83,14 @@ public class MinionAI : AI {
 				.OrderBy(x => Random.Range(0f, 1f))
 				.ElementAtOrDefault(0);
 			
-			if (target == null) {
-				return;
+			if (target != null) {
+				goals.Push(new Attack(){Target = target});
 			}
 			
-			goals.Push(new Attack(){Target = target});
-			Vector2 strafeDelta = Random.insideUnitCircle.normalized * STRAFE_RADIUS;
-			goals.Push(new Juke(){Destination = transform.position + new Vector3(strafeDelta.x, 0f, strafeDelta.y)});
+			if (target != null || (((MoveTowards)goals.Peek()).Destination - transform.position).magnitude < STRAFE_RADIUS) {
+				Vector2 strafeDelta = Random.insideUnitCircle.normalized * STRAFE_RADIUS;
+				goals.Push(new Juke(){Destination = transform.position + new Vector3(strafeDelta.x, 0f, strafeDelta.y)});
+			}
 		}
 	}
 
