@@ -24,6 +24,8 @@ public class TurretAI : AI {
 	protected Projectile projectile;
 	protected Spawn spawn;
 	
+	protected Ability ability;
+	
 	protected List<GameObject> activeMinions;
 	
 	public void Start() {
@@ -32,6 +34,11 @@ public class TurretAI : AI {
 		spawn = this.GetProvider().GetAbility<Spawn>();
 		teamSelector = TargetManager.IsOpposing(GetComponent<Target>());
 		goals.Push(new Push(){Spawn = null});
+		GetComponent<CharacterEventListener>().AddCallback(CharacterEvents.Hit, Activate);
+	}
+	
+	protected void Activate (CharacterEvent data) {
+		ability = data.Source.Ability;
 	}
 	
 	protected override void Reevaluate () {

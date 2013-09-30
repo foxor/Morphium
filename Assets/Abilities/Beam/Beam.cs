@@ -60,6 +60,7 @@ public class Beam : Ability {
 		beam.transform.position = statManager.transform.position + delta.normalized * HALF_BEAM_LENGTH;
 		beam.transform.rotation = Quaternion.LookRotation(delta);
 		beam.GetComponent<DamageDuringContact>().DamagePerSecond = DamagePerSecond;
+		beam.GetComponent<DamageDuringContact>().Ability = this;
 	}
 	
 	public override void Update() {

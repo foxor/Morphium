@@ -9,6 +9,10 @@ public abstract class DamageDealer : MonoBehaviour {
 		get; set;
 	}
 	
+	public Ability Ability {
+		get; set;
+	}
+	
 	protected virtual void Enter(GameObject other) {
 	}
 	public void OnTriggerEnter(Collider other) {
