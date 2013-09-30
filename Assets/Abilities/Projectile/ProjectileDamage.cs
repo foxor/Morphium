@@ -5,9 +5,9 @@ public class ProjectileDamage : DamageDealer {
 	public Damage damage;
 	
 	protected override void Enter(GameObject other) {
-		StatManager manager = other.GetComponent<StatManager>();
-		if (manager != null) {
-			manager.DealDamage(damage, true, this);
+		CharacterEventListener listener = other.GetComponent<CharacterEventListener>();
+		if (listener != null) {
+			listener.Broadcast(CharacterEvents.Hit, new CharacterEvent(){Damage = damage, Source = this});
 			Destroy(gameObject);
 		}
 	}

@@ -24,31 +24,31 @@ public class DamageDuringContact : DamageDealer {
 	
 	protected float damageTickInterval;
 	protected Damage singleTickDamage;
-	protected Dictionary<StatManager, float> nextDamageTime;
+	protected Dictionary<CharacterEventListener, float> nextDamageTime;
 	
 	public void Awake() {
-		nextDamageTime = new Dictionary<StatManager, float>();
+		nextDamageTime = new Dictionary<CharacterEventListener, float>();
 	}
 	
 	protected override void Enter(GameObject other) {
-		StatManager manager = other.GetComponent<StatManager>();
-		if (manager != null) {
-			nextDamageTime[manager] = Time.time + damageTickInterval;
+		CharacterEventListener listener = other.GetComponent<CharacterEventListener>();
+		if (listener != null) {
+			nextDamageTime[listener] = Time.time + damageTickInterval;
 		}
 	}
 	
 	protected override void Exit(GameObject other) {
-		StatManager manager = other.GetComponent<StatManager>();
-		if (manager != null) {
-			nextDamageTime.Remove(manager);
+		CharacterEventListener listener = other.GetComponent<CharacterEventListener>();
+		if (listener != null) {
+			nextDamageTime.Remove(listener);
 		}
 	}
 	
 	public void Update() {
-		foreach (StatManager manager in nextDamageTime.Keys.ToArray()) {
-			while (nextDamageTime[manager] < Time.time) {
-				manager.DealDamage(singleTickDamage, true, this);
-				nextDamageTime[manager] += damageTickInterval;
+		foreach (CharacterEventListener listener in nextDamageTime.Keys.ToArray()) {
+			while (nextDamageTime[listener] < Time.time) {
+				listener.Broadcast(CharacterEvents.Hit, new CharacterEvent() {Damage = singleTickDamage, Source = this});
+				nextDamageTime[listener] += damageTickInterval;
 			}
 		}
 	}

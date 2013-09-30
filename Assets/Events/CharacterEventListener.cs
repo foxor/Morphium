@@ -6,11 +6,22 @@ public enum CharacterEvents {
 	Kill,
 	Die,
 	Equip,
-	Destroy
+	Destroy,
+	Hit
 }
 
 public class CharacterEvent : EventData {
-	public GameObject other;
+	public GameObject Other {
+		get; set;
+	}
+	
+	public Damage Damage {
+		get; set;
+	}
+	
+	public DamageDealer Source {
+		get; set;
+	}
 }
 
 public class CharacterEventListener : EventListenerComponent<CharacterEvents, CharacterEvent> {

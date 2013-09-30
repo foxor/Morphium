@@ -59,6 +59,6 @@ public class ItemGenerator : MonoBehaviour {
 	}
 	
 	protected void OnKill(CharacterEvent data) {
-		trap.AddItem(Generate(NextValue()), data.other.transform.position);
+		trap.AddItem(Generate(NextValue()), data.Other.transform.position);
 	}
 }

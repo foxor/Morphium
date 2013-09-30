@@ -28,6 +28,7 @@ public abstract class StatManager : MonoBehaviour {
 		listener.AddCallback(CharacterEvents.Kill, AwardKill);
 		listener.AddCallback(CharacterEvents.Equip, Reset);
 		listener.AddCallback(CharacterEvents.Destroy, UnregisterGlobal);
+		listener.AddCallback(CharacterEvents.Hit, DealDamage);
 		GlobalEventListener.Listener().AddCallback(Level.Shop, Reset);
 		GermaniumTracker.Singleton().AddCallback(GermaniumEvent.MorphiumSpend, AllocateRegen);
 	}
@@ -53,7 +54,17 @@ public abstract class StatManager : MonoBehaviour {
 		}
 	}
 	
-	public void DealDamage(Damage damage, bool stopRegen, DamageDealer damageDealer) {
+	protected void DealDamage(CharacterEvent data) {
+		DealDamage(data.Damage, true, data.Source);
+	}
+	
+	public void PayCost(int cost) {
+		if (cost > 0) {
+			DealDamage(new Damage(){Magnitude = cost, Type = Element.Plasma}, false, null);
+		}
+	}
+	
+	protected void DealDamage(Damage damage, bool stopRegen, DamageDealer damageDealer) {
 		if (damage.Magnitude == 0 || this == null || deathHandler.IsDead) {
 			return;
 		}
@@ -73,7 +84,7 @@ public abstract class StatManager : MonoBehaviour {
 			if (damageDealer != null && damageDealer.Owner != null) {
 				CharacterEventListener killer = damageDealer.Owner.GetComponent<CharacterEventListener>();
 				if (killer != null) {
-					killer.Broadcast(CharacterEvents.Kill, new CharacterEvent(){other = gameObject});
+					killer.Broadcast(CharacterEvents.Kill, new CharacterEvent(){Other = gameObject});
 				}
 			}
 			

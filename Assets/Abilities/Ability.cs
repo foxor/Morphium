@@ -47,9 +47,7 @@ public abstract class Ability {
 				(pressedThisFrame || !requiresPress)) {
 			int cost = Cost();
 			if (cost == 0 || statManager == null || statManager.GetCurrent(StatType.Morphium) > cost) {
-				if (statManager != null && cost > 0) {
-					statManager.DealDamage(new Damage(){Magnitude = cost, Type = Element.Plasma}, false, null);
-				}
+				statManager.PayCost(cost);
 				castComplete = Time.time + castTime;
 				nextIdle = castComplete + cooldown;
 				Cast(target);
