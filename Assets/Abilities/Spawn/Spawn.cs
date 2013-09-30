@@ -35,15 +35,10 @@ public class Spawn : Ability {
 	
 	protected override void Cast(Vector3 direction) {
 		spawn = (GameObject)GameObject.Instantiate(minionPrefab);
-		Vector3 delta;
-		if (enemy == null) {
-			delta = Vector3.zero;
+		if (enemy != null) {
+			spawn.GetComponent<MinionAI>().LongTermGoal = enemy;
 		}
-		else {
-			delta = (enemy.transform.position - transform.position).normalized * SPAWN_DISTANCE;
-			spawn.GetComponent<MinionAI>().LongTermGoal = enemy.transform.position;
-		}
-		spawn.transform.position = transform.position + delta;
+		spawn.transform.position = transform.position;
 		spawn.GetComponent<Target>().Team = target.Team;
 		foreach (Renderer r in spawn.GetComponentsInChildren<Renderer>()) {
 			r.material.color = color;

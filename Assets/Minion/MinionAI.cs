@@ -47,7 +47,7 @@ public class MinionAI : AI {
 		AbilityProvider provider = this.GetProvider();
 		movement = provider.GetAbility<Move>();
 		projectile = provider.GetAbility<Projectile>();
-		longTermGoal = transform.position;
+		longTermGoal = target;
 	}
 	
 	protected IEnumerator SetupLongTermGoal() {
@@ -55,17 +55,17 @@ public class MinionAI : AI {
 			yield return 0;
 		}
 		goals.Clear();
-		if (longTermGoal.Team == target.Team) {
-			float lerpDelta = WAYPOINT_SPACING / (longTermGoal - transform.position).magnitude;
+		if (longTermGoal != null && (longTermGoal.transform.position - transform.position).magnitude > WAYPOINT_SPACING) {
+			float lerpDelta = WAYPOINT_SPACING / (longTermGoal.transform.position - transform.position).magnitude;
 			for (float lerp = 1f; lerp >= 0f; lerp -= lerpDelta) {
-				goals.Push(new MoveTowards(){Destination = Vector3.Lerp(transform.position, longTermGoal, lerp)});
+				goals.Push(new MoveTowards(){Destination = Vector3.Lerp(transform.position, longTermGoal.transform.position, lerp)});
 			}
 		}
 	}
 	
 	protected override void Reevaluate () {
 		if (!goals.Any()) {
-			goals.Push(new MoveTowards(){Destination = longTermGoal});
+			goals.Push(new MoveTowards(){Destination = longTermGoal.transform.position});
 		}
 		if (goals.Peek() is Attack) {
 			Target currentTarget = ((Attack)goals.Peek()).Target;
