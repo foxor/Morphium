@@ -24,9 +24,8 @@ public class Spawn : Ability {
 	
 	public void Enable(int Team, Target goal, Color color) {
 		target.Team = Team;
-		this.target = goal;
+		this.goal = goal;
 		this.color = color;
-		statManager.GetComponent<ColorChanger>().color = color;
 	}
 	
 	protected override int Cost() {
@@ -35,13 +34,11 @@ public class Spawn : Ability {
 	
 	protected override void Cast(Vector3 direction) {
 		spawn = (GameObject)GameObject.Instantiate(minionPrefab);
-		if (goal != null) {
-			spawn.GetComponent<MinionAI>().LongTermGoal = goal;
-		}
 		spawn.transform.position = transform.position;
 		spawn.GetComponent<Target>().Team = target.Team;
-		foreach (Renderer r in spawn.GetComponentsInChildren<Renderer>()) {
-			r.material.color = color;
+		spawn.GetComponent<ColorChanger>().SetColor(color);
+		if (goal != null) {
+			spawn.GetComponent<MinionAI>().LongTermGoal = goal;
 		}
 	}
 	

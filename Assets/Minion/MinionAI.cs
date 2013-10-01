@@ -88,7 +88,9 @@ public class MinionAI : AI {
 				goals.Push(new Attack(){Target = target});
 			}
 			
-			if (target != null || (((MoveTowards)goals.Peek()).Destination - transform.position).sqrMagnitude < STRAFE_RADIUS_SQUARED) {
+			if (target != null || 
+				(((MoveTowards)goals.Peek()).Destination - transform.position).sqrMagnitude < STRAFE_RADIUS_SQUARED) 
+			{
 				Vector2 strafeDelta = Random.insideUnitCircle.normalized * STRAFE_RADIUS;
 				goals.Push(new Juke(){Destination = transform.position + new Vector3(strafeDelta.x, 0f, strafeDelta.y)});
 			}

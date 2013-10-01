@@ -18,6 +18,7 @@ public class TurretAI : AI {
 	protected Target target;
 	protected Projectile projectile;
 	protected Spawn spawn;
+	protected Lane lane;
 	
 	protected Ability ability;
 	
@@ -30,6 +31,7 @@ public class TurretAI : AI {
 		target = GetComponent<Target>();
 		teamSelector = TargetManager.IsOpposing(target);
 		GetComponent<CharacterEventListener>().AddCallback(CharacterEvents.Hit, Activate);
+		lane = GetComponent<Lane>();
 	}
 	
 	protected int Team {
@@ -45,16 +47,15 @@ public class TurretAI : AI {
 		ability = data.Source.Ability;
 		Team = data.Source.Owner.GetComponent<Target>().Team;
 		ColorChanger cc = data.Source.Owner.GetComponent<ColorChanger>();
-		foreach (Renderer r in GetComponentsInChildren<Renderer>()) {
-			r.material.color = cc.color;
-		}
+		GetComponent<ColorChanger>().SetColor(cc.color);
+		spawn.Enable(Team, lane.Next(), cc.color);
 		GetComponent<CharacterEventListener>().RemoveCallback(CharacterEvents.Hit, Activate);
 	}
 	
 	protected override void Reevaluate () {
 		if (goals.Any() && goals.Peek().GetType() == typeof(Attack) &&
-			(((Attack)goals.Peek()).Target.transform.position - transform.position)
-			.sqrMagnitude > SQUARED_AGGRO_RANGE)
+			(((Attack)goals.Peek()).Target == null || (((Attack)goals.Peek()).Target.transform.position - transform.position)
+			.sqrMagnitude > SQUARED_AGGRO_RANGE))
 		{
 			goals.Pop();
 		}
