@@ -41,7 +41,7 @@ public class EventListener<E, C> : IEventListener<E, C> where C : EventData {
 		if (callbacks.ContainsKey(trigger)) {
 			List<Callback<C>> registered = callbacks[trigger];
 			if (registered != null) {
-				foreach (Callback<C> callback in registered) {
+				foreach (Callback<C> callback in registered.ToArray()) {
 					callback(data);
 				}
 			}

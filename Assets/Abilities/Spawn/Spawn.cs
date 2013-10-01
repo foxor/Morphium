@@ -8,7 +8,7 @@ public class Spawn : Ability {
 	protected static GameObject minionPrefab = (GameObject)Resources.Load(RESOURCE_NAME);
 	
 	protected Target target;
-	public Target enemy;
+	protected Target goal;
 	protected Color color;
 	protected GameObject spawn;
 	
@@ -22,9 +22,9 @@ public class Spawn : Ability {
 		target = statManager.GetComponent<Target>();
 	}
 	
-	public void Enable(int Team, Target enemy, Color color) {
+	public void Enable(int Team, Target goal, Color color) {
 		target.Team = Team;
-		this.enemy = enemy;
+		this.target = goal;
 		this.color = color;
 		statManager.GetComponent<ColorChanger>().color = color;
 	}
@@ -35,8 +35,8 @@ public class Spawn : Ability {
 	
 	protected override void Cast(Vector3 direction) {
 		spawn = (GameObject)GameObject.Instantiate(minionPrefab);
-		if (enemy != null) {
-			spawn.GetComponent<MinionAI>().LongTermGoal = enemy;
+		if (goal != null) {
+			spawn.GetComponent<MinionAI>().LongTermGoal = goal;
 		}
 		spawn.transform.position = transform.position;
 		spawn.GetComponent<Target>().Team = target.Team;

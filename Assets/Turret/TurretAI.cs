@@ -15,6 +15,7 @@ public class TurretAI : AI {
 	}
 	
 	protected Qualifier teamSelector;
+	protected Target target;
 	protected Projectile projectile;
 	protected Spawn spawn;
 	
@@ -26,12 +27,28 @@ public class TurretAI : AI {
 		activeMinions = new List<GameObject>();
 		projectile = this.GetProvider().GetAbility<Projectile>();
 		spawn = this.GetProvider().GetAbility<Spawn>();
-		teamSelector = TargetManager.IsOpposing(GetComponent<Target>());
+		target = GetComponent<Target>();
+		teamSelector = TargetManager.IsOpposing(target);
 		GetComponent<CharacterEventListener>().AddCallback(CharacterEvents.Hit, Activate);
+	}
+	
+	protected int Team {
+		get {
+			return target.Team;
+		}
+		set {
+			target.Team = value;
+		}
 	}
 	
 	protected void Activate (CharacterEvent data) {
 		ability = data.Source.Ability;
+		Team = data.Source.Owner.GetComponent<Target>().Team;
+		ColorChanger cc = data.Source.Owner.GetComponent<ColorChanger>();
+		foreach (Renderer r in GetComponentsInChildren<Renderer>()) {
+			r.material.color = cc.color;
+		}
+		GetComponent<CharacterEventListener>().RemoveCallback(CharacterEvents.Hit, Activate);
 	}
 	
 	protected override void Reevaluate () {
