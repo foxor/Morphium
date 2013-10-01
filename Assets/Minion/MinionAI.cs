@@ -17,12 +17,6 @@ public class MinionAI : AI {
 		}
 	}
 	
-	protected class Juke : AI.Goal {
-		public Vector3 Destination {
-			get; set;
-		}
-	}
-	
 	protected class Attack : AI.Goal {
 		public Target Target {
 			get; set;
@@ -34,6 +28,12 @@ public class MinionAI : AI {
 		set {
 			longTermGoal = value;
 			StartCoroutine(SetupLongTermGoal());
+		}
+	}
+	// Essentially a vector2, using our y position
+	public Vector3 Destination {
+		get {
+			return new Vector3(longTermGoal.transform.position.x, transform.position.y, longTermGoal.transform.position.z);
 		}
 	}
 	
@@ -56,26 +56,36 @@ public class MinionAI : AI {
 			yield return 0;
 		}
 		goals.Clear();
+		Vector3 destination = Destination;
 		if (longTermGoal != null && (longTermGoal.transform.position - transform.position).magnitude > WAYPOINT_SPACING) {
-			float lerpDelta = WAYPOINT_SPACING / (longTermGoal.transform.position - transform.position).magnitude;
+			float lerpDelta = WAYPOINT_SPACING / (destination - transform.position).magnitude;
 			for (float lerp = 1f; lerp >= 0f; lerp -= lerpDelta) {
-				goals.Push(new MoveTowards(){Destination = Vector3.Lerp(transform.position, longTermGoal.transform.position, lerp)});
+				goals.Push(new MoveTowards(){Destination = Vector3.Lerp(transform.position, destination, lerp)});
 			}
 		}
 	}
 	
 	protected override void Reevaluate () {
+		// If we don't have anything to do, either patrol near your destination, or move in that direction
 		if (!goals.Any()) {
-			goals.Push(new MoveTowards(){Destination = longTermGoal.transform.position});
+			if ((longTermGoal.transform.position - transform.position).sqrMagnitude < STRAFE_RADIUS_SQUARED) {
+				Vector2 strafeDelta = Random.insideUnitCircle.normalized * STRAFE_RADIUS;
+				goals.Push(new MoveTowards(){Destination = transform.position + new Vector3(strafeDelta.x, 0f, strafeDelta.y)});
+			}
+			else {
+				goals.Push(new MoveTowards(){Destination = Destination});
+			}
 		}
+		
 		if (goals.Peek() is Attack) {
+			// If we have someone to attack, check that they haven't wandered off
 			Target currentTarget = ((Attack)goals.Peek()).Target;
 			if (currentTarget == null || (currentTarget.transform.position - transform.position).sqrMagnitude > SQUARED_AGGRO_RANGE) {
 				goals.Pop();
 			}
 		}
-		
-		if (goals.Peek() is MoveTowards) {
+		else {
+			//If we don't have anyone to attack, check and see if we do
 			Target target = TargetManager.GetTargets(teamSelector)
 				.Where(x => x.gameObject != this.gameObject)
 				.Where(x => 
@@ -87,13 +97,6 @@ public class MinionAI : AI {
 			if (target != null) {
 				goals.Push(new Attack(){Target = target});
 			}
-			
-			if (target != null || 
-				(((MoveTowards)goals.Peek()).Destination - transform.position).sqrMagnitude < STRAFE_RADIUS_SQUARED) 
-			{
-				Vector2 strafeDelta = Random.insideUnitCircle.normalized * STRAFE_RADIUS;
-				goals.Push(new Juke(){Destination = transform.position + new Vector3(strafeDelta.x, 0f, strafeDelta.y)});
-			}
 		}
 	}
 
@@ -104,8 +107,8 @@ public class MinionAI : AI {
 			}
 			projectile.TryCast(true, ((Attack)goal).Target.transform.position);
 		}
-		else if (goal is MoveTowards || goal is Juke) {
-			Vector3 destination = goal is MoveTowards ? ((MoveTowards)goal).Destination : ((Juke)goal).Destination;
+		else if (goal is MoveTowards) {
+			Vector3 destination = ((MoveTowards)goal).Destination;
 			if ((destination - transform.position).sqrMagnitude < SQUARED_STOP_RANGE) {
 				movement.Stop();
 				return false;
@@ -115,5 +118,5 @@ public class MinionAI : AI {
 		return true;
 	}
 	
-	protected override void Process () {}
+	protected override void Process () { }
 }
