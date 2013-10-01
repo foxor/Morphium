@@ -57,19 +57,22 @@ public class TurretAI : AI {
 		goals.Push(new Attack(){Target = target});
 	}
 
-	protected override bool Process (Goal goal) {
+	protected override bool ProcessGoal (Goal goal) {
 		if (goal.GetType() == typeof(Attack)) {
 			if (((Attack)goal).Target == null) {
 				return false;
 			}
 			projectile.TryCast(true, ((Attack)goal).Target.transform.position);
 		}
+		return true;
+	}
+	
+	protected override void Process () {
 		if (spawn.castState == Ability.CastState.Idle) {
 			activeMinions.RemoveAll(x => x == null);
 			if (activeMinions.Count < MINION_COUNT && spawn.TryCast(true, Vector3.zero)) {
 				activeMinions.Add(spawn.LastSpawn);
 			}
 		}
-		return true;
 	}
 }

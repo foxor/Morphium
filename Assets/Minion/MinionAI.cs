@@ -95,7 +95,7 @@ public class MinionAI : AI {
 		}
 	}
 
-	protected override bool Process (Goal goal) {
+	protected override bool ProcessGoal (Goal goal) {
 		if (goal is Attack) {
 			if (((Attack)goal).Target == null) {
 				return false;
@@ -112,4 +112,6 @@ public class MinionAI : AI {
 		}
 		return true;
 	}
+	
+	protected override void Process () {}
 }
