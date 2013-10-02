@@ -32,10 +32,8 @@ public abstract class AI : MonoBehaviour {
 			Reevaluate();
 		}
 		
-		if (goals.Any()) {
-			if (!ProcessGoal(goals.Peek())) {
-				goals.Pop();
-			}
+		while (goals.Any() && !ProcessGoal(goals.Peek())) {
+			goals.Pop();
 		}
 		Process();
 	}

@@ -7,6 +7,8 @@ public class Germanium : MonoBehaviour {
 	
 	protected const int DEFAULT_SIZE = 10000;
 	
+	protected const float SPAWN_DISTANCE = 8f;
+	
 	protected int startingResources;
 	
 	protected int resource;
@@ -42,6 +44,16 @@ public class Germanium : MonoBehaviour {
 	}
 	
 	protected void OnHit(CharacterEvent data) {
+		Resource /= 2;
+ 		GameObject chunk = (GameObject)Instantiate(gameObject);
+		chunk.GetComponent<Germanium>().startingResources = startingResources;
+		chunk.GetComponent<Germanium>().Resource = Resource;
+		Vector3 delta = Random.insideUnitSphere * SPAWN_DISTANCE;
+		Vector3 euler = transform.rotation.eulerAngles;
+		euler.y = Random.Range(0f, 360f);
+		delta.y = 0f;
+		chunk.transform.position = transform.position + delta;
+		chunk.transform.rotation = Quaternion.Euler(euler);
 	}
 	
 	static float Easing(float interp) {
