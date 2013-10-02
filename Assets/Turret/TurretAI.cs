@@ -19,6 +19,7 @@ public class TurretAI : AI {
 	protected Projectile projectile;
 	protected Spawn spawn;
 	protected Lane lane;
+	protected ColorChanger colorChanger;
 	
 	protected Ability ability;
 	
@@ -28,7 +29,9 @@ public class TurretAI : AI {
 		activeMinions = new List<GameObject>();
 		projectile = this.GetProvider().GetAbility<Projectile>();
 		spawn = this.GetProvider().GetAbility<Spawn>();
+		colorChanger = GetComponent<ColorChanger>();
 		target = GetComponent<Target>();
+		spawn.Enable(target.Team, target, colorChanger.color);
 		teamSelector = TargetManager.IsOpposing(target);
 		GetComponent<CharacterEventListener>().AddCallback(CharacterEvents.Hit, Activate);
 		lane = GetComponent<Lane>();
@@ -47,7 +50,7 @@ public class TurretAI : AI {
 		ability = data.Source.Ability;
 		Team = data.Source.Owner.GetComponent<Target>().Team;
 		ColorChanger cc = data.Source.Owner.GetComponent<ColorChanger>();
-		GetComponent<ColorChanger>().SetColor(cc.color);
+		colorChanger.SetColor(cc.color);
 		spawn.Enable(Team, lane.Next(), cc.color);
 		GetComponent<CharacterEventListener>().RemoveCallback(CharacterEvents.Hit, Activate);
 	}
