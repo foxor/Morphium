@@ -94,6 +94,8 @@ public class MinionAI : AI {
 				.ElementAtOrDefault(0);
 			
 			if (target != null) {
+				Vector2 strafeDelta = Random.insideUnitCircle.normalized * STRAFE_RADIUS;
+				goals.Push(new MoveTowards(){Destination = transform.position + new Vector3(strafeDelta.x, 0f, strafeDelta.y)});
 				goals.Push(new Attack(){Target = target});
 			}
 		}
@@ -104,7 +106,7 @@ public class MinionAI : AI {
 			if (((Attack)goal).Target == null) {
 				return false;
 			}
-			projectile.TryCast(true, ((Attack)goal).Target.transform.position);
+			return !projectile.TryCast(true, ((Attack)goal).Target.transform.position);
 		}
 		else if (goal is MoveTowards) {
 			Vector3 destination = ((MoveTowards)goal).Destination;
