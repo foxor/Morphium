@@ -7,14 +7,20 @@ public enum CharacterEvents {
 	Die,
 	Equip,
 	Destroy,
-	Hit
+	Hit,
+	PickUp
 }
 
 public class CharacterEvent : EventData {
+}
+
+public class KillEvent : CharacterEvent {
 	public GameObject Other {
 		get; set;
 	}
-	
+}
+
+public class HitEvent : CharacterEvent {
 	public Damage Damage {
 		get; set;
 	}

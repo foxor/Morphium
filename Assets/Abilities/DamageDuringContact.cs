@@ -47,7 +47,7 @@ public class DamageDuringContact : DamageDealer {
 	public void Update() {
 		foreach (CharacterEventListener listener in nextDamageTime.Keys.ToArray()) {
 			while (nextDamageTime[listener] < Time.time) {
-				listener.Broadcast(CharacterEvents.Hit, new CharacterEvent() {Damage = singleTickDamage, Source = this});
+				listener.Broadcast(CharacterEvents.Hit, new HitEvent() {Damage = singleTickDamage, Source = this});
 				nextDamageTime[listener] += damageTickInterval;
 			}
 		}

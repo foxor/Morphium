@@ -15,6 +15,10 @@ public class MinionAI : AI {
 		public Vector3 Destination {
 			get; set;
 		}
+		
+		public bool Priority {
+			get; set;
+		}
 	}
 	
 	protected class Attack : AI.Goal {
@@ -41,6 +45,7 @@ public class MinionAI : AI {
 	protected Target target;
 	protected Move movement;
 	protected Projectile projectile;
+	protected Vector3 home;
 	
 	public void Start() {
 		target = GetComponent<Target>();
@@ -48,6 +53,11 @@ public class MinionAI : AI {
 		AbilityProvider provider = this.GetProvider();
 		movement = provider.GetAbility<Move>();
 		projectile = provider.GetAbility<Projectile>();
+		GetComponent<CharacterEventListener>().AddCallback(CharacterEvents.PickUp, OnGermaniumPickup);
+	}
+	
+	protected void OnGermaniumPickup(CharacterEvent data) {
+		goals.Push(new MoveTowards(){Destination = home, Priority = true});
 	}
 	
 	protected IEnumerator SetupLongTermGoal() {
@@ -55,6 +65,7 @@ public class MinionAI : AI {
 			yield return 0;
 		}
 		goals.Clear();
+		home = transform.position;
 		Vector3 destination = Destination;
 		if (longTermGoal != null && (longTermGoal.transform.position - transform.position).magnitude > WAYPOINT_SPACING) {
 			float lerpDelta = WAYPOINT_SPACING / (destination - transform.position).magnitude;
@@ -94,8 +105,10 @@ public class MinionAI : AI {
 				.ElementAtOrDefault(0);
 			
 			if (target != null) {
-				Vector2 strafeDelta = Random.insideUnitCircle.normalized * STRAFE_RADIUS;
-				goals.Push(new MoveTowards(){Destination = transform.position + new Vector3(strafeDelta.x, 0f, strafeDelta.y)});
+				if (!(goals.Peek() is MoveTowards && ((MoveTowards)goals.Peek()).Priority)) {
+					Vector2 strafeDelta = Random.insideUnitCircle.normalized * STRAFE_RADIUS;
+					goals.Push(new MoveTowards(){Destination = transform.position + new Vector3(strafeDelta.x, 0f, strafeDelta.y)});
+				}
 				goals.Push(new Attack(){Target = target});
 			}
 		}

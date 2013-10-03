@@ -7,7 +7,7 @@ public class ProjectileDamage : DamageDealer {
 	protected override void Enter(GameObject other) {
 		CharacterEventListener listener = other.GetComponent<CharacterEventListener>();
 		if (listener != null) {
-			listener.Broadcast(CharacterEvents.Hit, new CharacterEvent(){Damage = damage, Source = this});
+			listener.Broadcast(CharacterEvents.Hit, new HitEvent(){Damage = damage, Source = this});
 			Destroy(gameObject);
 		}
 	}

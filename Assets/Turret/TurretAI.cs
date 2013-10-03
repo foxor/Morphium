@@ -47,9 +47,9 @@ public class TurretAI : AI {
 	}
 	
 	protected void Activate (CharacterEvent data) {
-		ability = data.Source.Ability;
-		Team = data.Source.Owner.GetComponent<Target>().Team;
-		ColorChanger cc = data.Source.Owner.GetComponent<ColorChanger>();
+		ability = ((HitEvent)data).Source.Ability;
+		Team = ((HitEvent)data).Source.Owner.GetComponent<Target>().Team;
+		ColorChanger cc = ((HitEvent)data).Source.Owner.GetComponent<ColorChanger>();
 		colorChanger.SetColor(cc.color);
 		spawn.Enable(Team, lane.Next(), cc.color);
 		GetComponent<CharacterEventListener>().RemoveCallback(CharacterEvents.Hit, Activate);

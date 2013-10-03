@@ -55,7 +55,7 @@ public abstract class StatManager : MonoBehaviour {
 	}
 	
 	protected void DealDamage(CharacterEvent data) {
-		DealDamage(data.Damage, true, data.Source);
+		DealDamage(((HitEvent)data).Damage, true, ((HitEvent)data).Source);
 	}
 	
 	public void PayCost(int cost) {
@@ -84,7 +84,7 @@ public abstract class StatManager : MonoBehaviour {
 			if (damageDealer != null && damageDealer.Owner != null) {
 				CharacterEventListener killer = damageDealer.Owner.GetComponent<CharacterEventListener>();
 				if (killer != null) {
-					killer.Broadcast(CharacterEvents.Kill, new CharacterEvent(){Other = gameObject});
+					killer.Broadcast(CharacterEvents.Kill, new KillEvent(){Other = gameObject});
 				}
 			}
 			

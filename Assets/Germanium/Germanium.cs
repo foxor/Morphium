@@ -44,12 +44,18 @@ public class Germanium : MonoBehaviour {
 		GetComponent<CharacterEventListener>().AddCallback(CharacterEvents.Hit, OnHit);
 	}
 	
+	public bool Carryable {
+		get {
+			return Resource <= CARRYABLE_SIZE;
+		}
+	}
+	
 	protected void OnHit(CharacterEvent data) {
-		if (Resource <= CARRYABLE_SIZE) {
+		if (Carryable) {
 			// Germanium should remove itself from damage triggers instead
 			return;
 		}
-		int knockOffDamage = Mathf.Min(data.Damage.Magnitude, CARRYABLE_SIZE);
+		int knockOffDamage = Mathf.Min(((HitEvent)data).Damage.Magnitude, CARRYABLE_SIZE);
 		Resource -= knockOffDamage;
  		GameObject chunk = (GameObject)Instantiate(gameObject);
 		Vector3 delta = Random.insideUnitSphere * SPAWN_DISTANCE;
