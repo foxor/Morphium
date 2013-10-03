@@ -6,7 +6,7 @@ using System.Linq;
 public class TurretAI : AI {
 	
 	protected const float SQUARED_AGGRO_RANGE = 81f;
-	protected const int MINION_COUNT = 8;
+	protected const int MINION_COUNT = 15;
 	
 	protected class Attack : AI.Goal {
 		public Target Target {

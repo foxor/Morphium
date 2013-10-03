@@ -98,6 +98,7 @@ public abstract class StatManager : MonoBehaviour {
 			else {
 				damaged.AllocatedRegen += GermaniumTracker.Singleton()[target.Team];
 				GermaniumTracker.Singleton()[target.Team] = 0;
+				awaitingRegen.Enqueue(damage.Type.Damages());
 			}
 		}
 	}

@@ -21,7 +21,7 @@ public class GermaniumLevel : EventData {
 
 public class GermaniumTracker : EventListenerComponent<GermaniumEvent, GermaniumLevel> {
 	
-	protected const int INITIAL_GERMANIUM = 100;
+	protected const int INITIAL_GERMANIUM = 0;
 	
 	protected static GermaniumTracker singleton;
 	
