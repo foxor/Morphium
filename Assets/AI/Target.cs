@@ -9,6 +9,10 @@ public class Target : MonoBehaviour {
 		TargetManager.AddTarget(this);
 	}
 	
+	public void OnDisable() {
+		TargetManager.RemoveTarget(this);
+	}
+	
 	public void OnDestroy() {
 		TargetManager.RemoveTarget(this);
 	}

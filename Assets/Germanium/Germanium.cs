@@ -10,6 +10,8 @@ public class Germanium : MonoBehaviour {
 	
 	protected const float SPAWN_DISTANCE = 8f;
 	
+	protected const int GERMANIUM_CHUNK_PHYSICS_LAYER = 10;
+	
 	protected int startingResources;
 	
 	protected int resource;
@@ -28,6 +30,10 @@ public class Germanium : MonoBehaviour {
 			float scale = Scale;
 			transform.localScale = new Vector3(scale, scale, scale);
 			transform.position = new Vector3(transform.position.x, scale, transform.position.z);
+			if (Carryable) {
+				GetComponent<Target>().enabled = false;
+				gameObject.layer = GERMANIUM_CHUNK_PHYSICS_LAYER;
+			}
 		}
 	}
 	
@@ -51,10 +57,6 @@ public class Germanium : MonoBehaviour {
 	}
 	
 	protected void OnHit(CharacterEvent data) {
-		if (Carryable) {
-			// Germanium should remove itself from damage triggers instead
-			return;
-		}
 		int knockOffDamage = Mathf.Min(((HitEvent)data).Damage.Magnitude, CARRYABLE_SIZE);
 		Resource -= knockOffDamage;
  		GameObject chunk = (GameObject)Instantiate(gameObject);

@@ -10,7 +10,6 @@ public class GermaniumPicker : MonoBehaviour {
 			held = germanium;
 			other.transform.parent = transform;
 			other.enabled = false;
-			TargetManager.RemoveTarget(other.GetComponent<Target>());
 			GetComponent<CharacterEventListener>().Broadcast(CharacterEvents.PickUp, new CharacterEvent());
 		}
 	}
