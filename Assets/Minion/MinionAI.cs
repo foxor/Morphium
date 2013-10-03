@@ -75,6 +75,13 @@ public class MinionAI : AI {
 		}
 	}
 	
+	protected bool AttackInvalid(Attack goal) {
+		Target currentTarget = goal.Target;
+		return currentTarget == null || 
+				(currentTarget.transform.position - transform.position).sqrMagnitude > SQUARED_AGGRO_RANGE ||
+				!projectile.CanPay;
+	}
+	
 	protected override void Reevaluate () {
 		// If we don't have anything to do, either patrol near your destination, or move in that direction
 		if (!goals.Any()) {
@@ -89,8 +96,7 @@ public class MinionAI : AI {
 		
 		if (goals.Peek() is Attack) {
 			// If we have someone to attack, check that they haven't wandered off
-			Target currentTarget = ((Attack)goals.Peek()).Target;
-			if (currentTarget == null || (currentTarget.transform.position - transform.position).sqrMagnitude > SQUARED_AGGRO_RANGE) {
+			if (AttackInvalid((Attack)goals.Peek())) {
 				goals.Pop();
 			}
 		}
@@ -116,7 +122,7 @@ public class MinionAI : AI {
 
 	protected override bool ProcessGoal (Goal goal) {
 		if (goal is Attack) {
-			if (((Attack)goal).Target == null) {
+			if (AttackInvalid((Attack)goal)) {
 				return false;
 			}
 			return !projectile.TryCast(true, ((Attack)goal).Target.transform.position);

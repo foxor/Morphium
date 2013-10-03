@@ -42,11 +42,18 @@ public abstract class Ability {
 		this.gameObject = host;
 	}
 	
+	public bool CanPay {
+		get {
+			int cost = Cost();
+			return cost == 0 || statManager == null || statManager.GetCurrent(StatType.Morphium) > cost;
+		}
+	}
+	
 	public bool TryCast(bool pressedThisFrame, Vector3 target) {
 		if (castState == CastState.Idle && 
 				(pressedThisFrame || !requiresPress)) {
 			int cost = Cost();
-			if (cost == 0 || statManager == null || statManager.GetCurrent(StatType.Morphium) > cost) {
+			if (CanPay) {
 				statManager.PayCost(cost);
 				castComplete = Time.time + castTime;
 				nextIdle = castComplete + cooldown;
