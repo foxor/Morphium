@@ -6,6 +6,7 @@ public class Germanium : MonoBehaviour {
 	protected const float SIZE_RANGE = 4f;
 	
 	protected const int DEFAULT_SIZE = 10000;
+	protected const int CARRYABLE_SIZE = 40;
 	
 	protected const float SPAWN_DISTANCE = 8f;
 	
@@ -44,16 +45,21 @@ public class Germanium : MonoBehaviour {
 	}
 	
 	protected void OnHit(CharacterEvent data) {
-		Resource /= 2;
+		if (Resource <= CARRYABLE_SIZE) {
+			// Germanium should remove itself from damage triggers instead
+			return;
+		}
+		int knockOffDamage = Mathf.Min(data.Damage.Magnitude, CARRYABLE_SIZE);
+		Resource -= knockOffDamage;
  		GameObject chunk = (GameObject)Instantiate(gameObject);
-		chunk.GetComponent<Germanium>().startingResources = startingResources;
-		chunk.GetComponent<Germanium>().Resource = Resource;
 		Vector3 delta = Random.insideUnitSphere * SPAWN_DISTANCE;
 		Vector3 euler = transform.rotation.eulerAngles;
 		euler.y = Random.Range(0f, 360f);
 		delta.y = 0f;
 		chunk.transform.position = transform.position + delta;
 		chunk.transform.rotation = Quaternion.Euler(euler);
+		chunk.GetComponent<Germanium>().startingResources = startingResources;
+		chunk.GetComponent<Germanium>().Resource = knockOffDamage;
 	}
 	
 	static float Easing(float interp) {
