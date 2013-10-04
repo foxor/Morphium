@@ -27,8 +27,8 @@ public class MinionAI : AI {
 		}
 	}
 	
-	protected Target longTermGoal;
-	public Target LongTermGoal {
+	protected LaneElement longTermGoal;
+	public LaneElement LongTermGoal {
 		set {
 			longTermGoal = value;
 			StartCoroutine(SetupLongTermGoal());

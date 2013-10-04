@@ -8,7 +8,7 @@ public class Spawn : Ability {
 	protected static GameObject minionPrefab = (GameObject)Resources.Load(RESOURCE_NAME);
 	
 	protected Target target;
-	protected Target goal;
+	protected LaneElement goal;
 	protected Color color;
 	protected GameObject spawn;
 	
@@ -22,7 +22,7 @@ public class Spawn : Ability {
 		target = statManager.GetComponent<Target>();
 	}
 	
-	public void Enable(int Team, Target goal, Color color) {
+	public void Enable(int Team, LaneElement goal, Color color) {
 		target.Team = Team;
 		this.goal = goal;
 		this.color = color;

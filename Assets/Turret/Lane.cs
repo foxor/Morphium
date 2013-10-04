@@ -2,10 +2,10 @@ using UnityEngine;
 using System.Collections.Generic;
 
 public class Lane : MonoBehaviour {
-	public Target[] targets;
+	public LaneElement[] targets;
 	
-	public Target Next() {
-		foreach (Target t in targets) {
+	public LaneElement Next() {
+		foreach (LaneElement t in targets) {
 			if (t != null) {
 				return t;	
 			}

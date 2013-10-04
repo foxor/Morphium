@@ -31,7 +31,7 @@ public class TurretAI : AI {
 		spawn = this.GetProvider().GetAbility<Spawn>();
 		colorChanger = GetComponent<ColorChanger>();
 		target = GetComponent<Target>();
-		spawn.Enable(target.Team, target, colorChanger.color);
+		spawn.Enable(target.Team, GetComponent<LaneElement>(), colorChanger.color);
 		teamSelector = TargetManager.IsOpposing(target);
 		GetComponent<CharacterEventListener>().AddCallback(CharacterEvents.Hit, Activate);
 		lane = GetComponent<Lane>();
