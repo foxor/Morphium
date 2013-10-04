@@ -45,13 +45,18 @@ public class MinionAI : AI {
 			int newGoal = value >= longTermGoals.Count ? longTermGoals.Count - 1 : value;
 			if (longTermGoals[newGoal] == null) {
 				int delta = newGoal > currentGoal ? 1 : -1;
+				bool foundGoal = false;
 				for (; 
 					newGoal < longTermGoals.Count &&
-					newGoal >= 0 &&
-					longTermGoals[newGoal] == null;
+					newGoal >= 0;
 					newGoal += delta
-				);
-				if (longTermGoals[newGoal] == null) {
+				) {
+					if (newGoal != null) {
+						foundGoal = true;
+						break;
+					}
+				}
+				if (!foundGoal) {
 					longTermGoals = longTermGoals.Where(x => x != null).ToList();
 					newGoal = 0;
 					everSet = false;
