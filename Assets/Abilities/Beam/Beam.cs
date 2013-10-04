@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Beam : Ability {
 	
-	protected const int HALF_BEAM_LENGTH = 15;
+	protected const float BEAM_LENGTH_DEFAULT = 30f;
 	protected const string RESOURCE_NAME = "Beam";
 	protected static GameObject prefab = (GameObject)Resources.Load(RESOURCE_NAME);
 	
@@ -21,12 +21,19 @@ public class Beam : Ability {
 	protected GameObject beam;
 	protected float costRemainder;
 	
+	public float BeamLength {
+		get; set;
+	}
+	
 	public Beam(StatManager s) : this(s, DEFAULT_DPS_RATIO, DEFAULT_SLOT, DEFAULT_ELEMENT, DEFAULT_COST_PER_DAMAGE_PER_SECOND){}
 	public Beam(StatManager s, float damagePerSecondRatio, Slot slot, Element element, float costPerDamagePerSecond) : base(s){
 		this.damagePerSecondRatio = damagePerSecondRatio;
 		this.element = element;
 		this.slot = slot;
 		this.costPerDamagePerSecond = costPerDamagePerSecond;
+		if (BeamLength == 0) {
+			BeamLength = BEAM_LENGTH_DEFAULT;
+		}
 	}
 	
 	protected override int Cost () {
@@ -57,8 +64,9 @@ public class Beam : Ability {
 		castThisFrame = true;
 		target.y = statManager.transform.position.y;
 		Vector3 delta = target - statManager.transform.position;
-		beam.transform.position = statManager.transform.position + delta.normalized * HALF_BEAM_LENGTH;
+		beam.transform.position = statManager.transform.position + delta.normalized * BeamLength / 2f;
 		beam.transform.rotation = Quaternion.LookRotation(delta);
+		beam.transform.localScale = new Vector3(1f, 1f, BeamLength);
 		beam.GetComponent<DamageDuringContact>().DamagePerSecond = DamagePerSecond;
 		beam.GetComponent<DamageDuringContact>().Ability = this;
 	}
