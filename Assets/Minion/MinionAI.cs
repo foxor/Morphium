@@ -43,6 +43,20 @@ public class MinionAI : AI {
 		}
 		set {
 			int newGoal = value >= longTermGoals.Count ? longTermGoals.Count - 1 : value;
+			if (longTermGoals[newGoal] == null) {
+				int delta = newGoal > currentGoal ? 1 : -1;
+				for (; 
+					newGoal < longTermGoals.Count &&
+					newGoal >= 0 &&
+					longTermGoals[newGoal] == null;
+					newGoal += delta
+				);
+				if (longTermGoals[newGoal] == null) {
+					longTermGoals = longTermGoals.Where(x => x != null).ToList();
+					newGoal = 0;
+					everSet = false;
+				}
+			}
 			if (newGoal != currentGoal || !everSet) {
 				everSet = true;
 				currentGoal = newGoal;
@@ -54,6 +68,9 @@ public class MinionAI : AI {
 	// Essentially a vector2, using our y position
 	public Vector3 Destination {
 		get {
+			if (longTermGoals[CurrentGoal] == null) {
+				return home;
+			}
 			return new Vector3(longTermGoals[CurrentGoal].transform.position.x, transform.position.y, longTermGoals[CurrentGoal].transform.position.z);
 		}
 	}
