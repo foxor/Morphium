@@ -1,15 +1,15 @@
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 
 public class Lane : MonoBehaviour {
 	public LaneElement[] targets;
 	
-	public LaneElement Next() {
+	public IEnumerable<LaneElement> Enumerator() {
 		foreach (LaneElement t in targets) {
 			if (t != null) {
-				return t;	
+				yield return t;
 			}
 		}
-		return null;
 	}
 }

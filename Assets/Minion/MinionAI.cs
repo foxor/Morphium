@@ -27,17 +27,34 @@ public class MinionAI : AI {
 		}
 	}
 	
-	protected LaneElement longTermGoal;
-	public LaneElement LongTermGoal {
+	protected List<LaneElement> longTermGoals;
+	public IEnumerable<LaneElement> LongTermGoal {
 		set {
-			longTermGoal = value;
-			StartCoroutine(SetupLongTermGoal());
+			longTermGoals = value.ToList<LaneElement>();
+			CurrentGoal = 0;
 		}
 	}
+	
+	protected bool everSet;
+	protected int currentGoal;
+	protected int CurrentGoal {
+		get {
+			return currentGoal;
+		}
+		set {
+			int newGoal = value >= longTermGoals.Count ? longTermGoals.Count - 1 : value;
+			if (newGoal != currentGoal || !everSet) {
+				everSet = true;
+				currentGoal = newGoal;
+				StartCoroutine(SetupLongTermGoal());
+			}
+		}
+	}
+	
 	// Essentially a vector2, using our y position
 	public Vector3 Destination {
 		get {
-			return new Vector3(longTermGoal.transform.position.x, transform.position.y, longTermGoal.transform.position.z);
+			return new Vector3(longTermGoals[CurrentGoal].transform.position.x, transform.position.y, longTermGoals[CurrentGoal].transform.position.z);
 		}
 	}
 	
@@ -67,7 +84,7 @@ public class MinionAI : AI {
 		goals.Clear();
 		home = transform.position;
 		Vector3 destination = Destination;
-		if (longTermGoal != null && (longTermGoal.transform.position - transform.position).magnitude > WAYPOINT_SPACING) {
+		if (longTermGoals != null && (destination - transform.position).magnitude > WAYPOINT_SPACING) {
 			float lerpDelta = WAYPOINT_SPACING / (destination - transform.position).magnitude;
 			for (float lerp = 1f; lerp >= 0f; lerp -= lerpDelta) {
 				goals.Push(new MoveTowards(){Destination = Vector3.Lerp(transform.position, destination, lerp)});
@@ -85,16 +102,17 @@ public class MinionAI : AI {
 	protected override void Reevaluate () {
 		// If we don't have anything to do, either patrol near your destination, or move in that direction
 		if (!goals.Any()) {
-			if ((longTermGoal.transform.position - transform.position).sqrMagnitude < STRAFE_RADIUS_SQUARED) {
+			if ((Destination - transform.position).sqrMagnitude < STRAFE_RADIUS_SQUARED) {
 				Vector2 strafeDelta = Random.insideUnitCircle.normalized * STRAFE_RADIUS;
 				goals.Push(new MoveTowards(){Destination = transform.position + new Vector3(strafeDelta.x, 0f, strafeDelta.y)});
+				CurrentGoal++;
 			}
 			else {
 				goals.Push(new MoveTowards(){Destination = Destination});
 			}
 		}
 		
-		if (goals.Peek() is Attack) {
+		if (goals.Any() && goals.Peek() is Attack) {
 			// If we have someone to attack, check that they haven't wandered off
 			if (AttackInvalid((Attack)goals.Peek())) {
 				goals.Pop();
