@@ -5,6 +5,7 @@ public class ColorChanger : MonoBehaviour {
 	public Color color;
 	
 	public void Awake() {
+		SetColor(color);
 	}
 	
 	public void SetColor(Color color) {
