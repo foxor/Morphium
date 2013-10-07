@@ -137,6 +137,12 @@ public abstract class StatManager : MonoBehaviour {
 				s.NextRegenTick += s.SingleTickRegenTimer;
 			}
 		}
+		foreach (StatType type in awaitingRegen) {
+			Stat s = stats[type];
+			if (s.Current == s.AllocatedRegen && s.NextRegenTick < Time.time) {
+				s.NextRegenTick = Time.time + s.SingleTickRegenTimer;
+			}
+		}
 	}
 }
 
