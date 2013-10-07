@@ -42,8 +42,14 @@ public class TurretAI : AI {
 			return target.Team;
 		}
 		set {
-			target.Team = value;
+			target.SetTeam(value);
 		}
+	}
+	
+	public void HackActivate (int newTeam) {
+		Team = newTeam;
+		spawn.Enable(Team, lane.Enumerator(), colorChanger.color);
+		GetComponent<CharacterEventListener>().RemoveCallback(CharacterEvents.Hit, Activate);
 	}
 	
 	protected void Activate (CharacterEvent data) {
