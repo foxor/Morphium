@@ -16,14 +16,19 @@ public class DeathHandler : MonoBehaviour {
 	public void Start() {
 		isPlayer = (GetComponent<HealthBar>() != null);
 		isDead = false;
+		GlobalEventListener.Listener().AddCallback(Level.Adventure, onLoad);
 		GetComponent<CharacterEventListener>().AddCallback(CharacterEvents.Die, OnDeath);
+	}
+	
+	public void onLoad(LevelChangeEventData data) {
+		isDead = false;
 	}
 	
 	public void OnDeath(CharacterEvent data) {
 		if (!isPlayer) {
 			Destroy(gameObject);
-			isDead = true;
 		}
+		isDead = true;
 		GlobalEventListener.Listener().Broadcast(GetComponent<TypeProvider>().Type, new CharacterStatusEventData(){
 			EventCharacterType = GetComponent<TypeProvider>().Type,
 			EventStatus = CharacterStatusEventData.Status.Die,
