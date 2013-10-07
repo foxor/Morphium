@@ -42,7 +42,7 @@ public class MinionAI : AI {
 			return currentGoal;
 		}
 		set {
-			int newGoal = value >= longTermGoals.Count ? longTermGoals.Count - 1 : value;
+			int newGoal = Mathf.Clamp(value, 0, longTermGoals.Count - 1);
 			if (longTermGoals[newGoal] == null) {
 				int delta = newGoal > currentGoal ? 1 : -1;
 				bool foundGoal = false;
@@ -51,7 +51,7 @@ public class MinionAI : AI {
 					newGoal >= 0;
 					newGoal += delta
 				) {
-					if (newGoal != null) {
+					if (longTermGoals[newGoal] != null) {
 						foundGoal = true;
 						break;
 					}
@@ -73,6 +73,9 @@ public class MinionAI : AI {
 	// Essentially a vector2, using our y position
 	public Vector3 Destination {
 		get {
+			if (CurrentGoal >= longTermGoals.Count) {
+				return Vector3.zero;
+			}
 			if (longTermGoals[CurrentGoal] == null) {
 				return home;
 			}
