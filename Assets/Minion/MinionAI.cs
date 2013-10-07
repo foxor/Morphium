@@ -121,6 +121,7 @@ public class MinionAI : AI {
 		Target currentTarget = goal.Target;
 		return currentTarget == null || 
 				(currentTarget.transform.position - transform.position).sqrMagnitude > SQUARED_AGGRO_RANGE ||
+				currentTarget.Team == target.Team ||
 				!projectile.CanPay;
 	}
 	

@@ -61,10 +61,17 @@ public class TurretAI : AI {
 		GetComponent<CharacterEventListener>().RemoveCallback(CharacterEvents.Hit, Activate);
 	}
 	
+	protected bool AttackInvalid(Attack goal) {
+		Target currentTarget = goal.Target;
+		return currentTarget == null || 
+				(currentTarget.transform.position - transform.position).sqrMagnitude > SQUARED_AGGRO_RANGE ||
+				currentTarget.Team == target.Team ||
+				!projectile.CanPay;
+	}
+	
 	protected override void Reevaluate () {
 		if (goals.Any() && goals.Peek().GetType() == typeof(Attack) &&
-			(((Attack)goals.Peek()).Target == null || (((Attack)goals.Peek()).Target.transform.position - transform.position)
-			.sqrMagnitude > SQUARED_AGGRO_RANGE))
+			AttackInvalid((Attack)goals.Peek()))
 		{
 			goals.Pop();
 		}
@@ -86,7 +93,7 @@ public class TurretAI : AI {
 
 	protected override bool ProcessGoal (Goal goal) {
 		if (goal.GetType() == typeof(Attack)) {
-			if (((Attack)goal).Target == null) {
+			if (AttackInvalid((Attack)goal)) {
 				return false;
 			}
 			projectile.TryCast(true, ((Attack)goal).Target.transform.position);
