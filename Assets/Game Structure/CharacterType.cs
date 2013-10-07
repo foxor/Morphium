@@ -5,5 +5,6 @@ using System.Collections.Generic;
 public enum CharacterType {
 	Morphid,
 	Base,
-	Minion
+	Minion,
+	Turret
 }

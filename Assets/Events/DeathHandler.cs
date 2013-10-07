@@ -25,7 +25,7 @@ public class DeathHandler : MonoBehaviour {
 			isDead = true;
 		}
 		GlobalEventListener.Listener().Broadcast(GetComponent<TypeProvider>().Type, new CharacterStatusEventData(){
-			EventCharacterType = CharacterStatusEventData.CharacterType.Morphid,
+			EventCharacterType = GetComponent<TypeProvider>().Type,
 			EventStatus = CharacterStatusEventData.Status.Die,
 			Source = gameObject
 		});

@@ -21,11 +21,6 @@ public class CharacterStatusEventData : EventData {
 		Spawn,
 		Die
 	}
-	public enum CharacterType {
-		Base,
-		Minion,
-		Morphid
-	}
 	
 	public Status EventStatus {
 		get; set;
