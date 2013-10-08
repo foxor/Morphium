@@ -75,4 +75,10 @@ public class GermaniumTracker : EventListenerComponent<GermaniumEvent, Germanium
 			germaniumTotals[team] = newVal.Level;
 		}
 	}
+	
+	public void OnGUI() {
+		GUILayout.BeginArea(new Rect(0f, 200f, 300f, 100f));
+		GUILayout.Label("Germanium: " + germaniumTotals[0]);
+		GUILayout.EndArea();
+	}
 }
