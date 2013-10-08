@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 public class ItemGenerator : MonoBehaviour {
 	
@@ -45,7 +46,10 @@ public class ItemGenerator : MonoBehaviour {
 			OffStatBoost = (int)((((float)itemValue) * offStat) / totalWeight),
 			HealthBoost = (int)((((float)itemValue) * health) / totalWeight),
 			MorphiumBoost = (int)((((float)itemValue) * morphium) / totalWeight),
-			OffStatType = System.Enum.GetValues(typeof(StatType)).Pick<StatType>(),
+			OffStatType = System.Enum.GetValues(typeof(StatType))
+				.Cast<StatType>()
+				.Where(x => x != slot.Boosts())
+				.Pick<StatType>(),
 			GrantedAbility = GenerateAbility(slot)
 		};
 	}
