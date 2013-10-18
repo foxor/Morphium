@@ -54,7 +54,7 @@ public class Projectile : Ability {
 			projectile.GetDamageDealer().Owner = gameObject;
 			AbilityProvider projectileProvider = projectile.GetProvider();
 			Move projectileMovement = projectileProvider.GetAbility<Move>();
-			projectileMovement.TryCast(true, targets.Dequeue());
+			projectileMovement.TryCast(targets.Dequeue());
 			projectile.GetComponent<ProjectileDamage>().damage = MyDamage;
 			projectile.GetComponent<ProjectileDamage>().Ability = this;
 		}

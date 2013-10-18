@@ -1,12 +1,32 @@
 using UnityEngine;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 public class AbilityDispatcher : MonoBehaviour {
+	protected delegate bool trigger();
+	
 	protected AbilityProvider Provider;
+	protected Dictionary<trigger, int> SkillMapping;
 	
 	public void Awake() {
 		Provider = this.GetProvider();
+		SkillMapping = new Dictionary<trigger, int>() {
+			{CaptureKey(KeyCode.Q), 0},
+			{CaptureKey(KeyCode.W), 2},
+			{CaptureKey(KeyCode.E), 3},
+			{CaptureKey(KeyCode.R), 4},
+			{CaptureMouse(1), 1},
+			{CaptureMouse(0), 5}
+		};
+	}
+	
+	protected trigger CaptureKey(KeyCode key) {
+		return () => Input.GetKey(key);
+	}
+	
+	protected trigger CaptureMouse(int button) {
+		return () => Input.GetMouseButton(button);
 	}
 	
 	public void Start() {
@@ -22,23 +42,10 @@ public class AbilityDispatcher : MonoBehaviour {
 		if (raycast == null || Wall.isWall(raycast.Value)) {
 			return;
 		}
-		if (Input.GetKey(KeyCode.Q) && Provider.Abilities[0] != null) {
-			Provider.Abilities[0].TryCast(Input.GetKeyDown(KeyCode.Q), raycast.Value.point);
-		}
-		if (Input.GetKey(KeyCode.W) && Provider.Abilities[1] != null) {
-			Provider.Abilities[1].TryCast(Input.GetKeyDown(KeyCode.W), raycast.Value.point);
-		}
-		if (Input.GetKey(KeyCode.E) && Provider.Abilities[2] != null) {
-			Provider.Abilities[2].TryCast(Input.GetKeyDown(KeyCode.E), raycast.Value.point);
-		}
-		if (Input.GetKey(KeyCode.R) && Provider.Abilities[3] != null) {
-			Provider.Abilities[3].TryCast(Input.GetKeyDown(KeyCode.R), raycast.Value.point);
-		}
-		if (Input.GetMouseButton(1) && Provider.Abilities[4] != null) {
-			Provider.Abilities[4].TryCast(Input.GetMouseButtonDown(1), raycast.Value.point);
-		}
-		if (Input.GetMouseButton(0) && Provider.Abilities[5] != null) {
-			Provider.Abilities[5].TryCast(Input.GetMouseButtonDown(0), raycast.Value.point);
+		foreach (trigger trigger in SkillMapping.Keys) {
+			if (trigger() && Provider.Abilities[SkillMapping[trigger]] != null) {
+				Provider.Abilities[SkillMapping[trigger]].TryCast(raycast.Value.point);
+			}
 		}
 	}
 }

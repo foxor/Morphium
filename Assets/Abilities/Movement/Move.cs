@@ -28,9 +28,11 @@ public class Move : Ability {
 	protected override void Cast (Vector3 target) {
 		target.y = transform.position.y;
 		delta = target - transform.position;
-		transform.rotation = Quaternion.LookRotation(delta.Value.normalized);
-		if (ContinueToRange) {
-			delta = delta.Value.normalized * Range;
+		if (delta.Value.sqrMagnitude > 0) {
+			transform.rotation = Quaternion.LookRotation(delta.Value.normalized);
+			if (ContinueToRange) {
+				delta = delta.Value.normalized * Range;
+			}
 		}
 	}
 	
@@ -55,7 +57,7 @@ public class Move : Ability {
 				transform.position += delta.Value;
 				delta = null;
 				if (OnArrival != null) {
-					OnArrival.TryCast(true, Vector3.zero);
+					OnArrival.TryCast(Vector3.zero);
 				}
 			}
 			else {

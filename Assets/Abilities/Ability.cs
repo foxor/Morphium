@@ -6,8 +6,6 @@ public abstract class Ability {
 	protected abstract void Cast(Vector3 target);
 	protected abstract int Cost();
 	
-	public bool requiresPress;
-	
 	public float cooldown;
 	public float castTime;
 	
@@ -49,9 +47,8 @@ public abstract class Ability {
 		}
 	}
 	
-	public bool TryCast(bool pressedThisFrame, Vector3 target) {
-		if (castState == CastState.Idle && 
-				(pressedThisFrame || !requiresPress)) {
+	public bool TryCast(Vector3 target) {
+		if (castState == CastState.Idle) {
 			int cost = Cost();
 			if (CanPay) {
 				statManager.PayCost(cost);

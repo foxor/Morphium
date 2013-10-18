@@ -96,7 +96,7 @@ public class TurretAI : AI {
 			if (AttackInvalid((Attack)goal)) {
 				return false;
 			}
-			projectile.TryCast(true, ((Attack)goal).Target.transform.position);
+			projectile.TryCast(((Attack)goal).Target.transform.position);
 		}
 		return true;
 	}
@@ -104,7 +104,7 @@ public class TurretAI : AI {
 	protected override void Process () {
 		if (spawn.castState == Ability.CastState.Idle) {
 			activeMinions.RemoveAll(x => x == null);
-			if (activeMinions.Count < MINION_COUNT && spawn.TryCast(true, Vector3.zero)) {
+			if (activeMinions.Count < MINION_COUNT && spawn.TryCast(Vector3.zero)) {
 				activeMinions.Add(spawn.LastSpawn);
 			}
 		}

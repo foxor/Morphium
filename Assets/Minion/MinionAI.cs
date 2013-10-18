@@ -169,7 +169,7 @@ public class MinionAI : AI {
 			if (AttackInvalid((Attack)goal)) {
 				return false;
 			}
-			return !projectile.TryCast(true, ((Attack)goal).Target.transform.position);
+			return !projectile.TryCast(((Attack)goal).Target.transform.position);
 		}
 		else if (goal is MoveTowards) {
 			Vector3 destination = ((MoveTowards)goal).Destination;
@@ -177,7 +177,7 @@ public class MinionAI : AI {
 				movement.Stop();
 				return false;
 			}
-			movement.TryCast(true, destination);
+			movement.TryCast(destination);
 		}
 		return true;
 	}
