@@ -22,22 +22,22 @@ public class AbilityDispatcher : MonoBehaviour {
 		if (raycast == null || Wall.isWall(raycast.Value)) {
 			return;
 		}
-		if (Input.GetKey(KeyCode.Q)) {
+		if (Input.GetKey(KeyCode.Q) && Provider.Abilities[0] != null) {
 			Provider.Abilities[0].TryCast(Input.GetKeyDown(KeyCode.Q), raycast.Value.point);
 		}
-		if (Input.GetKey(KeyCode.W)) {
+		if (Input.GetKey(KeyCode.W) && Provider.Abilities[1] != null) {
 			Provider.Abilities[1].TryCast(Input.GetKeyDown(KeyCode.W), raycast.Value.point);
 		}
-		if (Input.GetKey(KeyCode.E)) {
+		if (Input.GetKey(KeyCode.E) && Provider.Abilities[2] != null) {
 			Provider.Abilities[2].TryCast(Input.GetKeyDown(KeyCode.E), raycast.Value.point);
 		}
-		if (Input.GetKey(KeyCode.R)) {
+		if (Input.GetKey(KeyCode.R) && Provider.Abilities[3] != null) {
 			Provider.Abilities[3].TryCast(Input.GetKeyDown(KeyCode.R), raycast.Value.point);
 		}
-		if (Input.GetMouseButton(1)) {
+		if (Input.GetMouseButton(1) && Provider.Abilities[4] != null) {
 			Provider.Abilities[4].TryCast(Input.GetMouseButtonDown(1), raycast.Value.point);
 		}
-		if (Input.GetMouseButton(0)) {
+		if (Input.GetMouseButton(0) && Provider.Abilities[5] != null) {
 			Provider.Abilities[5].TryCast(Input.GetMouseButtonDown(0), raycast.Value.point);
 		}
 	}

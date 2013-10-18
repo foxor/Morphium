@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 public class ItemGenerator : MonoBehaviour {
+	protected const int MORPHID_STARTING_ITEM_STATS = 10;
 	
 	protected LootTrap trap;
 	protected ItemManager itemManager;
@@ -14,6 +15,21 @@ public class ItemGenerator : MonoBehaviour {
 	
 	public void Start() {
 		GetComponent<CharacterEventListener>().AddCallback(CharacterEvents.Kill, OnKill);
+	}
+	
+	public static Item GenerateStartingItem(Slot slot, StatManager statManager) {
+		return new Item(){
+				StatBoost = MORPHID_STARTING_ITEM_STATS,
+				OffStatBoost = MORPHID_STARTING_ITEM_STATS,
+				HealthBoost = MORPHID_STARTING_ITEM_STATS,
+				MorphiumBoost = MORPHID_STARTING_ITEM_STATS,
+				OffStatType = StatType.Attack,
+				GrantedAbility = slot == Slot.Arm ?
+					new Projectile(statManager, slot, Element.Physical, 1f/3f, 0f){castTime = 0.1f, cooldown = 1.5f} :
+					null,
+				Icon = null,
+				FilledSlot = slot
+			};
 	}
 	
 	protected Ability GenerateAbility(Slot slot) {

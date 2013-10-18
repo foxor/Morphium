@@ -17,7 +17,7 @@ public abstract class AbilityProvider : MonoBehaviour {
 	protected abstract IEnumerable<Ability> abilitySource();
 	
 	public void Update() {
-		foreach (Ability a in Abilities) {
+		foreach (Ability a in Abilities.Where(x => x != null)) {
 			a.Update();
 		}
 	}

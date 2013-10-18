@@ -3,28 +3,20 @@ using System;
 using System.Collections.Generic;
 
 public class ItemManager : MonoBehaviour {
-	protected const int MORPHID_STARTING_ITEM_STATS = 10;
-	
 	protected Dictionary<Slot, Item> items;
 	
-	protected Ability omniGrant;
+	protected ItemGenerator itemGenerator;
+	
 	public Texture omniIcon;
 	
 	public void Awake() {
-		StatManager s = GetComponent<StatManager>();
-		omniGrant = new Projectile(s){castTime = 0.2f, cooldown = 1f};
 		items = new Dictionary<Slot, Item>();
+	}
+	
+	public void Start() {
+		StatManager s = GetComponent<StatManager>();
 		foreach (Slot slot in Enum.GetValues(typeof(Slot))) {
-			items[slot] = new Item(){
-				StatBoost = MORPHID_STARTING_ITEM_STATS,
-				OffStatBoost = MORPHID_STARTING_ITEM_STATS,
-				HealthBoost = MORPHID_STARTING_ITEM_STATS,
-				MorphiumBoost = MORPHID_STARTING_ITEM_STATS,
-				OffStatType = StatType.Attack,
-				GrantedAbility = omniGrant,
-				Icon = omniIcon,
-				FilledSlot = slot
-			};
+			items[slot] = ItemGenerator.GenerateStartingItem(slot, s);
 		}
 	}
 	
